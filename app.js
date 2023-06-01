@@ -164,8 +164,21 @@ app.get('v1/projeto-mecanica-senai/usuario:id', cors(), async function (resquest
 
 })
 
-app.post('v1/projero-mecanica-senai/usuario', cors, bodyParserJSON, async function (resquest, response) {
+app.post('v1/projeto-mecanica-senai/usuario', cors, bodyParserJSON, async function (resquest, response) {
+    let contentType = request.headers['content-type']
 
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+
+        let resultDadosUsuario = await controllerUsuario.inserirUsuario(dadosBody)
+
+        response.status(resultDadosUsuario.status)
+        response.json(resultDadosUsuario)
+    } else {
+        response.status(messages.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(messages.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 app.put('v1/projeto-mecanica-senai/usuario:id', cors(), bodyParserJSON, async function (resquest, response) {
