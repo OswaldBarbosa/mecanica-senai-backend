@@ -12,30 +12,30 @@ var { PrismaClient } = require('@prisma/client')
 var prisma = new PrismaClient()
 
 //Insere dados professor dentro do banco de dados
-const insertAluno = async function (dadosAluno) {
+const insertUsuario = async function (dadosUsuario) { 
 }
 
 //Atualiza os dados de um professor do banco de dados
-const updateAluno = async function (dadosAluno) {
+const updateUsuario = async function (dadosUsuario) {
 
 }
 
 //Deleta o professor do banco de dados
-const deleteAluno = async function (id) {
+const deleteUsuario = async function (id) {
 
 }
 
 //Seleciona todos os professores dentro do banco de dados
-const selectAllAlunos = async function () {
+const selectAllUsuario = async function () {
 
 }
 
 //Seleciona um professor específico dentro do banco de dados usando o id
-const selectAlunoById = async function (id) {
+const selectUsuarioById = async function (id) {
 
 }
 
 //Seleciona um professor específico dentro do banco de dados usando o nome
-const selectAlunoByName = async function (nomeALuno) {
+const selectUsuarioByName = async function (nomeUsuario) {
 
 }
