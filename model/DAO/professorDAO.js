@@ -60,3 +60,24 @@ const selectProfessoreById = async function (id) {
 const selectProfessoreByName = async function (nomeProfessor) {
 
 }
+
+const selectLastId = async () => {
+
+    //script para pegar o ultimo ID inserido na tabela de alunos
+    let sql = `select * from tbl_professor order by id desc limit 1;`
+
+    //executa o script sql no banco de dados
+    let resultStatus = await prisma.$queryRawUnsafe(sql)
+
+    if (resultStatus.length > 0) {
+        return true
+    } else {
+        return false
+    }
+
+}
+
+module.exports = {
+    insertProfessor,
+    selectLastId
+}

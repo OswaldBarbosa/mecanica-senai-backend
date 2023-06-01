@@ -26,6 +26,10 @@ app.use((resquest, response, next) => {
     next()
 })
 
+var controllerProfessor = require('./controller/controller_professor.js')
+
+var message = require('./controller/modulo/config.js')
+
 //Define que os dados que iram chegar na requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
 
@@ -108,6 +112,25 @@ app.get('v1/projeto-mecanica-senai/professor/:nome', cors(), async function (res
 
 //endpoint: Insere um novo professor no banco de dados
 app.post('v1/projeto-mecanica-senai/professor', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let resultadoDadosProfessor = await controllerProfessor.inserirProfessor(dadosBody)
+
+        response.status(resultadoDadosProfessor.status)
+        response.json(resultadoDadosProfessor)
+
+    } else {
+
+        response.status(message.E)
+
+    }
 
 })
 
