@@ -128,7 +128,8 @@ app.post('v1/projeto-mecanica-senai/professor', cors(), bodyParserJSON, async fu
 
     } else {
 
-        response.status(message.E)
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
 
     }
 
@@ -182,3 +183,7 @@ app.delete('v1/projeto-mecanica-senai/usuario:id', cors(), async function (resqu
 })
 
 /********************************************************* ENDPOPINTS **********************************************************/
+
+app.listen(8080, function () {
+    console.log('Servidor aguardando requisições na porta 8080')
+})

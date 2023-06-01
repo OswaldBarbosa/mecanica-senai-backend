@@ -71,5 +71,5 @@ const getProfessorByName = async function (nomeProfessor) {
 }
 
 module.exports = {
-    inserirProfessor
+    inserirProfessor    
 }
