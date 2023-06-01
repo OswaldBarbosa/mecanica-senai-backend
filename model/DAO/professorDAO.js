@@ -12,7 +12,28 @@ var { PrismaClient } = require('@prisma/client')
 var prisma = new PrismaClient()
 
 //Insere dados professor dentro do banco de dados
-const insertProfessor = async function (dadosProfessor) { 
+const insertProfessor = async function (dadosProfessor) {
+
+    //script para inserir un novo professor
+    let sql = `insert into tbl_professor (
+        nome,
+        data_nascimento,
+        id_usuario
+        ) values (
+        '${dadosProfessor.nome}',
+        '${dadosProfessor.data_nascimento}',
+        '${dadosProfessor.id_usuario}'
+        )`
+
+    //executa o script sql no banco de dados
+    let resultStatus = await prisma.$executeRawUnsafe(sql)
+
+    if (resultStatus) {
+        return true
+    } else {
+        return false
+    }
+
 }
 
 //Atualiza os dados de um professor do banco de dados

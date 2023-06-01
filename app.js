@@ -127,4 +127,35 @@ app.delete('v1/projeto-mecanica-senai/professor:id', cors(), async function (req
 
 })
 
+/********************************************************* ENDPOPINTS - USUARIOS **********************************************************/
+
+app.get('v1/projeto-mecanica-senai/usuario', cors(), async function (resquest, response) {
+
+})
+
+app.get('v1/projeto-mecanica-senai/usuario:id', cors(), async function (resquest, response) {
+
+    //recebe o ID do usuario pelo parametro
+    let idUsuario = resquest.params.id
+
+})
+
+app.post('v1/projero-mecanica-senai/usuario', cors, bodyParserJSON, async function (resquest, response) {
+
+})
+
+app.put('v1/projeto-mecanica-senai/usuario:id', cors(), bodyParserJSON, async function (resquest, response) {
+
+    //recebe o ID do usuario pelo parametro
+    let idUsuario = resquest.params.id
+
+})
+
+app.delete('v1/projeto-mecanica-senai/usuario:id', cors(), async function (resquest, response) {
+
+    //recebe o ID do usuario pelo parametro
+    let idUsuario = resquest.params.id
+
+})
+
 /********************************************************* ENDPOPINTS **********************************************************/

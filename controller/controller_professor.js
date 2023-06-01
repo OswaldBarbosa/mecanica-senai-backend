@@ -5,8 +5,17 @@
 * Versão: 1.0
 ***************************************************************************************/
 
+var messages = require('../controller/modulo/config.js')
+
 //Função que insere um novo professor
 const inserirProfessor = async function (dadosProfessor) {
+
+    if (dadosProfessor.nome == '' || dadosProfessor.nome ==  undefined || dadosProfessor.nome.length > 100 ||
+        dadosProfessor.data_nascimento == '' || dadosProfessor.data_nascimento == undefined || dadosProfessor.data_nascimento.length > 10 ||
+        dadosProfessor.id_usuario == '' || dadosProfessor.
+    ) {
+        return messages.ERROR_REQUIRED_FIELDS
+    }
 
 }
 

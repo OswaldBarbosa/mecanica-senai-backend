@@ -7,8 +7,8 @@
 
 //Função que insere um novo aluno
 const inserirAluno = async function (dadosAluno) {
-
-}
+    
+}   
 
 //Função que atualiza um aluno existente
 const atualizarAluno = async function (dadosAluno, idAluno) {
