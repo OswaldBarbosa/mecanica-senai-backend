@@ -58,6 +58,20 @@ const deletarProfessor = async function (idProfessor) {
 //Função que retorna a lista de todos os professores existentes dentro de nosso banco de dados
 const getProfessores = async function () {
 
+    let = dadosProfessorJSON = {}
+
+    let dadosProfessor = await professorDAO.selectAllProfessores()
+
+    if (dadosProfessor) {
+        dadosProfessorJSON.status = message.SUCCESS_REQUEST.status
+        dadosProfessor.message = message.SUCCESS_REQUEST.message
+        dadosProfessorJSON.quantidade = dadosProfessor.length
+        dadosProfessorJSON.professores = dadosProfessor
+        return dadosProfessorJSON 
+    } else {
+        return message.ERROR_NOT_FOUND
+    }
+
 }
 
 //Função que retorna um professor específico pelo id
@@ -71,5 +85,6 @@ const getProfessorByName = async function (nomeProfessor) {
 }
 
 module.exports = {
-    inserirProfessor    
+    getProfessores,
+    inserirProfessor
 }

@@ -16,6 +16,7 @@ const app = express()
 
 //defini as permições do cors
 app.use((resquest, response, next) => {
+
     //defini quem poderá acessar a  API
     response.header('Access-Control-Allow-Origin', '*')
     response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
@@ -24,6 +25,7 @@ app.use((resquest, response, next) => {
     app.use(cors())
 
     next()
+    
 })
 
 var controllerProfessor = require('./controller/controller_professor.js')
@@ -87,10 +89,15 @@ app.delete('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (resque
 
 })
 
-/********************************************************* ENDPOPINTS - PROFESSORES **********************************************************/
+/********************************************************* ENDPOINTS - PROFESSORES **********************************************************/
 
 //endpoint: Retorna todos os professores registrados no banco
 app.get('v1/projeto-mecanica-senai/professor', cors(), async function (resquest, response) {
+
+    let dadosProfessores = controllerProfessor.getProfessores()
+
+    response.status(dadosProfessores.status)
+    response.json(dadosProfessores)
 
 })
 
@@ -120,6 +127,8 @@ app.post('v1/projeto-mecanica-senai/professor', cors(), bodyParserJSON, async fu
 
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
+
+        console.log(dadosBody);
 
         let resultadoDadosProfessor = await controllerProfessor.inserirProfessor(dadosBody)
 

@@ -28,6 +28,8 @@ const insertProfessor = async function (dadosProfessor) {
     //executa o script sql no banco de dados
     let resultStatus = await prisma.$executeRawUnsafe(sql)
 
+    console.log(resultStatus);
+
     if (resultStatus) {
         return true
     } else {
@@ -48,6 +50,21 @@ const deleteProfessor = async function (id) {
 
 //Seleciona todos os professores dentro do banco de dados
 const selectAllProfessores = async function () {
+
+    let sql = `select   tbl_professor.nome,
+                        tbl_usuario.email, tbl_usuario.senha
+
+                        from tbl_professor
+                             inner join tbl_usuario
+                                   on tbl_usuario.id = tbl_professor.id_usuario;`
+
+    let resultadoProfessor = await prisma.$executeRawUnsafe(sql)
+
+    if (resultadoProfessor)  {
+        return true
+    } else {
+        return false
+    }
 
 }
 
@@ -78,6 +95,7 @@ const selectLastId = async () => {
 }
 
 module.exports = {
+    selectAllProfessores,
     insertProfessor,
     selectLastId
 }
