@@ -75,15 +75,15 @@ const selectProfessoreByName = async function (nomeProfessor) {
 const insertProfessor = async function (dadosProfessor) {
 
     //script para inserir un novo professor
-    let sql = `insert into tbl_professor (
-        nome,
-        data_nascimento,
-        id_usuario
-        ) values (
-        '${dadosProfessor.nome}',
-        '${dadosProfessor.data_nascimento}',
-        '${dadosProfessor.id_usuario}'
-        )`
+        let sql = `insert into tbl_professor (
+            nome,
+            data_nascimento,
+            id_usuario
+            ) values (
+            '${dadosProfessor.nome}',
+            '${dadosProfessor.data_nascimento}',
+            '${dadosProfessor.id_usuario}'
+            )`
 
     //executa o script sql no banco de dados
     let resultadoProfessor = await prisma.$executeRawUnsafe(sql)
@@ -118,13 +118,13 @@ const updateProfessor = async function (dadosProfessor) {
 
 //Deleta o professor do banco de dados
 const deleteProfessor = async function (id) {
-
+    
 }
 
 const selectLastId = async () => {
 
     //script para pegar o ultimo ID inserido na tabela de alunos
-    let sql = `select * from tbl_professor order by id desc limit 1;`
+    let sql = `select * from tbl_professor order by id desc limit 1 ;`
 
     //executa o script sql no banco de dados
     let resultStatus = await prisma.$queryRawUnsafe(sql)

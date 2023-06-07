@@ -68,7 +68,7 @@ const getProfessorByName = async function (nomeProfessor) {
             dadosProfessorJSON.message = message.SUCCESS_REQUEST.message
             dadosProfessorJSON.professor = dadosProfessor
             return dadosProfessorJSON
-        } else {
+        } else {    
             return message.ERROR_NOT_FOUND
         }
 
@@ -95,7 +95,7 @@ const inserirProfessor = async function (dadosProfessor) {
 
             //chama a função que vai encontar o ID gerado após o insert
             let novoProfessor = await professorDAO.selectLastId()
-
+            
             let dadosProfessorJSON = {}
 
             dadosProfessorJSON.status = message.SUCCESS_CREATE_ITEM.status

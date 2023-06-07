@@ -28,6 +28,7 @@ app.use((request, response, next) => {
 })
 
 var controllerProfessor = require('./controller/controller_professor.js')
+var controllerAluno = require('./controller/controller_aluno.js')
 
 var message = require('./controller/modulo/config.js')
 
@@ -41,6 +42,10 @@ const bodyParserJSON = bodyParser.json()
 //endpoint: Retorna todos os alunos registrados no banco
 app.get('v1/projeto-mecanica-senai/aluno', cors(), async function (request, response) {
 
+    let dadosAluno = await controllerAluno.getAlunos()
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
 })
 
 //endpoint: Retorna um aluno específico pelo ID
@@ -48,6 +53,11 @@ app.get('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (request, 
 
     //recebe o ID  do aluno pelo parametro
     let idAluno = request.params.id
+
+    let dadosAluno = await controllerAluno.getAlunoById(idAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
 
 })
 
@@ -57,6 +67,11 @@ app.get('v1/projeto-mecanica-senai/aluno/:matricula', cors(), async function (re
     //recebe o ID  do aluno pelo parametro
     let matriculaAluno = request.params.matricula
 
+    let dadosAluno = await controllerAluno.getAlunoByMatricula(matriculaAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+
 })
 
 //endpoint: Retorna um aluno específico pelo NOME
@@ -65,10 +80,32 @@ app.get('v1/projeto-mecanica-senai/aluno/nome/:nome', cors(), async function (re
     //recebe o NOME do aluno pelo parametro
     let nomeAluno = request.params.nome
 
+    let dadosAluno = await controllerAluno.getAlunoByName(nomeAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+
 })
 
 //endpoint: Insere um novo aluno no banco de dados
 app.post('v1/projeto-mecanica-senai/aluno', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.header['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if(String(contentType).toLowerCase() == 'application/json') {
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let resultadoDadosAluno = controllerAluno.atualizarAluno(dadosBody)
+
+        response.status(resultadoDadosAluno.status)
+        response.json(resultadoDadosAluno)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+
 
 })
 
@@ -78,6 +115,22 @@ app.put('v1/projeto-mecanica-senai/aluno/:id', cors(), bodyParserJSON, async fun
     //recebe o ID  do aluno pelo parametro
     let idAluno = request.params.id
 
+    let contentType = request.header['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if(String(contentType).toLowerCase() == 'application/json'){
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let resultadoDadosAluno = controllerAluno.updateAluno(dadosBody, idAluno)
+
+        response.status(resultadoDadosAluno.status)
+        response.json(resultadoDadosAluno)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+    }
+
 })
 
 //endpoint: Deleta um professor no banco de dados
@@ -85,6 +138,11 @@ app.delete('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (reques
 
     //recebe o ID  do aluno pelo parametro
     let idAluno = request.params.id
+
+    let dadosAluno = await controllerAluno.deletarAluno(idAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
 
 })
 
