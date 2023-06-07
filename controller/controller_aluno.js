@@ -118,6 +118,7 @@ const getAlunoById = async function (id) {
         return message.ERROR_INVALID_ID
     }else{
         let dadosAluno = await alunoDAO.selectAlunoById(id)
+    //boa
 
         let dadosAlunoJSON = {}
 
