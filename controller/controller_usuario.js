@@ -5,8 +5,63 @@
 * Versão: 1.0
 ***************************************************************************************/
 
-const messages = require('./modulo/config.js')
+var usuarioDAO = require('../model/DAO/usuarioDAO.js')
 
+var message = require('./modulo/config.js')
+
+//Função que retorna a lista de todos os professores existentes dentro de nosso banco de dados
+const getUsuario = async function () {
+
+    let dadosUsuarioJSON = {}
+
+    let dadosUsuario = await usuarioDAO.selectAllUsuario()
+
+    if (dadosUsuario) {
+
+        dadosUsuarioJSON.status = message.SUCCESS_REQUEST.status
+        dadosUsuarioJSON.message = message.SUCCESS_REQUEST.message
+        dadosUsuarioJSON.quantidade = dadosUsuario.length
+        dadosUsuarioJSON.usuarios = dadosUsuario
+
+        return dadosUsuarioJSON
+
+    } else {
+        return message.ERROR_NOT_FOUND
+    }
+
+}
+
+//Função que retorna um professor específico pelo id
+const getUsuarioById = async function (idUsuario) {
+
+    let dadosUsuarioJSON = {}
+
+    if (idUsuario == '' || idUsuario == undefined || isNaN(idUsuario)) {
+        return message.SUCCESS_REQUEST
+    } else {
+
+        let dadosUsuario = await usuarioDAO.selectUsuarioById(idUsuario)
+        
+        if (dadosUsuario) {
+
+            dadosUsuarioJSON.status = message.SUCCESS_REQUEST.status
+            dadosUsuarioJSON.message = message.SUCCESS_REQUEST.message
+            dadosUsuarioJSON.usuario = dadosUsuario
+            
+            return dadosUsuarioJSON
+
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+
+    }
+    
+}
+
+//Função que retorna um professor específico pelo nome
+const getUsuarioByName = async function (nomeProfessor) {
+
+}
 
 //Função que insere um novo professor
 const inserirUsuario = async function (dadosUsuario) {
@@ -15,7 +70,7 @@ const inserirUsuario = async function (dadosUsuario) {
 
     if (dadosUsuario.email == '' || dadosUsuario.email == undefined || dadosUsuario.email.length > 45 ||
         dadosUsuario.senha == '' || dadosUsuario.senha == undefined || dadosUsuario.senha.length > 45 ||
-        dadosUsuario.tipo == ''  || dadosUsuario.tipo == undefined  || dadosUsuario.length < 0
+        dadosUsuario.tipo == '' || dadosUsuario.tipo == undefined || dadosUsuario.length < 0
     ) {
         return messages.ERROR_REQUIRED_FIELDS
     } else {
@@ -47,21 +102,7 @@ const deletarUsuario = async function (idProfessor) {
 
 }
 
-//Função que retorna a lista de todos os professores existentes dentro de nosso banco de dados
-const getUsuario = async function () {
-
-}
-
-//Função que retorna um professor específico pelo id
-const getUsuarioById = async function (id) {
-
-}
-
-//Função que retorna um professor específico pelo nome
-const getUsuarioByName = async function (nomeProfessor) {
-
-}
-
 module.exports = {
-    inserirUsuario
+    getUsuario,
+    getUsuarioById
 }

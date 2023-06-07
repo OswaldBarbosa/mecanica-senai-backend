@@ -24,11 +24,13 @@ app.use((request, response, next) => {
     app.use(cors())
 
     next()
-    
+
 })
 
 var controllerProfessor = require('./controller/controller_professor.js')
 var controllerAluno = require('./controller/controller_aluno.js')
+
+var controllerUsuario = require('./controller/controller_usuario.js')
 
 var message = require('./controller/modulo/config.js')
 
@@ -36,6 +38,8 @@ var message = require('./controller/modulo/config.js')
 const bodyParserJSON = bodyParser.json()
 
 /********************************************************* ENDPOPINTS **********************************************************/
+
+/********************************************************* ENDPOPINTS - ALUNOS **********************************************************/
 
 /********************************************************* ENDPOPINTS - ALUNOS **********************************************************/
 
@@ -133,7 +137,7 @@ app.put('v1/projeto-mecanica-senai/aluno/:id', cors(), bodyParserJSON, async fun
 
 })
 
-//endpoint: Deleta um professor no banco de dados
+//endpoint: Deleta um aluno no banco de dados
 app.delete('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (request, response) {
 
     //recebe o ID  do aluno pelo parametro
@@ -152,7 +156,7 @@ app.delete('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (reques
 app.get('/v1/projeto-mecanica-senai/professor', cors(), async function (request, response) {
 
     let dadosProfessores = await controllerProfessor.getProfessores()
-    
+
     response.status(dadosProfessores.status)
     response.json(dadosProfessores)
 
@@ -195,10 +199,10 @@ app.post('/v1/projeto-mecanica-senai/professor/', cors(), bodyParserJSON, async 
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
-        let resultadoDadosProfessor = await controllerProfessor.inserirProfessor(dadosBody)
-        
-        response.status(resultadoDadosProfessor.status)
-        response.json(resultadoDadosProfessor)
+        let dadosProfessor = await controllerProfessor.inserirProfessor(dadosBody)
+
+        response.status(dadosProfessor.status)
+        response.json(dadosProfessor)
 
     } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
@@ -208,31 +212,64 @@ app.post('/v1/projeto-mecanica-senai/professor/', cors(), bodyParserJSON, async 
 })
 
 //endpoint: Atualiza um professor no banco de dados
-app.put('v1/projeto-mecanica-senai/professor/:id', cors(), bodyParserJSON, async function (request, response) {
+app.put('/v1/projeto-mecanica-senai/professor/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
-    //recebe o ID do professor pelo parametro
-    let idProfessor = request.params.id
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let idProfessor = request.params.id
+
+        let dadosBody = request.body
+
+        let dadosProfessor = await controllerProfessor.atualizarProfessor(dadosBody, idProfessor)
+
+        response.status(dadosProfessor.status)
+        response.json(dadosProfessor)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
 
 })
 
 //endpoint: Deleta um professor no banco de dados
-app.delete('v1/projeto-mecanica-senai/professor/:id', cors(), async function (request, response) {
+app.delete('/v1/projeto-mecanica-senai/professor/id/:id', cors(), async function (request, response) {
 
     //recebe o ID do professor pelo parametro
     let idProfessor = request.params.id
+
+    let dadosProfessor = await controllerProfessor.deletarProfessor(idProfessor)
+
+    response.status(dadosProfessor.status)
+    response.json(dadosProfessor)
 
 })
 
 /********************************************************* ENDPOPINTS - USUARIOS **********************************************************/
 
-app.get('v1/projeto-mecanica-senai/usuario', cors(), async function (request, response) {
+app.get('/v1/projeto-mecanica-senai/usuario', cors(), async function (request, response) {
+
+    let dadosUsuario = await controllerUsuario.getUsuario()
+
+    response.status(dadosUsuario.status)
+    response.json(dadosUsuario)
 
 })
 
-app.get('v1/projeto-mecanica-senai/usuario:id', cors(), async function (request, response) {
+app.get('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (request, response) {
 
     //recebe o ID do usuario pelo parametro
     let idUsuario = request.params.id
+
+    let dadosUsuario = await controllerUsuario.getUsuarioById(idUsuario)
+
+    response.status(dadosUsuario.status)
+    response.json(dadosUsuario)
 
 })
 
