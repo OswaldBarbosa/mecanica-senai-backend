@@ -41,8 +41,6 @@ const bodyParserJSON = bodyParser.json()
 
 /********************************************************* ENDPOPINTS - ALUNOS **********************************************************/
 
-/********************************************************* ENDPOPINTS - ALUNOS **********************************************************/
-
 //endpoint: Retorna todos os alunos registrados no banco
 app.get('v1/projeto-mecanica-senai/aluno', cors(), async function (request, response) {
 

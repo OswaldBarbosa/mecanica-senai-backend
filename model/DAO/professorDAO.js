@@ -32,14 +32,14 @@ const selectAllProfessores = async function () {
 }
 
 //Seleciona um professor específico dentro do banco de dados usando o id
-const selectProfessoreById = async function (id) {
+const selectProfessoreById = async function (idProfessor) {
 
     let sql = `select tbl_professor.id, tbl_professor.nome, tbl_professor.data_nascimento,
 	                  tbl_usuario.email, tbl_usuario.senha
     
                       from tbl_professor
                            inner join tbl_usuario
-                                 on tbl_usuario.id = tbl_professor.id_usuario where tbl_professor.id = ${id};`
+                                 on tbl_usuario.id = tbl_professor.id_usuario where tbl_professor.id = ${idProfessor};`
     
     let resultadoProfessor = await prisma.$queryRawUnsafe(sql)    
 
@@ -75,17 +75,6 @@ const selectProfessoreByName = async function (nomeProfessor) {
 const insertProfessor = async function (dadosProfessor) {
 
     //script para inserir un novo professor
-<<<<<<< HEAD
-        let sql = `insert into tbl_professor (
-            nome,
-            data_nascimento,
-            id_usuario
-            ) values (
-            '${dadosProfessor.nome}',
-            '${dadosProfessor.data_nascimento}',
-            '${dadosProfessor.id_usuario}'
-            )`
-=======
     let sql = `insert into tbl_professor (
         nome,
         data_nascimento,
@@ -97,7 +86,6 @@ const insertProfessor = async function (dadosProfessor) {
         '${dadosProfessor.nif}',
         '${dadosProfessor.id_usuario}'
         )`
->>>>>>> d2eeefe1176dfe49dc3d287312aa62f9d7358927
 
     //executa o script sql no banco de dados
     let resultadoProfessor = await prisma.$executeRawUnsafe(sql)
@@ -133,12 +121,9 @@ const updateProfessor = async function (dadosProfessor) {
 }
 
 //Deleta o professor do banco de dados
-const deleteProfessor = async function (id) {
-<<<<<<< HEAD
-    
-=======
+const deleteProfessor = async function (idProfessor) {
 
-    let sql = `delete from tbl_professor where id = ${id}`
+    let sql = `delete from tbl_professor where id = ${idProfessor}`
 
     let resultadoProfessor = await prisma.$queryRawUnsafe(sql)
 
@@ -148,7 +133,6 @@ const deleteProfessor = async function (id) {
         return false
     }
 
->>>>>>> d2eeefe1176dfe49dc3d287312aa62f9d7358927
 }
 
 const selectLastId = async () => {

@@ -75,12 +75,8 @@ const getProfessorByName = async function (nomeProfessor) {
             dadosProfessorJSON.professor = dadosProfessor
 
             return dadosProfessorJSON
-<<<<<<< HEAD
-        } else {    
-=======
             
         } else {
->>>>>>> d2eeefe1176dfe49dc3d287312aa62f9d7358927
             return message.ERROR_NOT_FOUND
         }
 
