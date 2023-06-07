@@ -1,7 +1,7 @@
 /***************************************************************************************
 * Objetivo: Arquivo de conexão com o banco de dados para a tabela de professor
 * Data: 23/05/2023
-* Autor: André Luiz e Oswaldo Barbosa
+* Autor: Vinícius Monteiro  
 * Versão: 1.0
 ***************************************************************************************/
 

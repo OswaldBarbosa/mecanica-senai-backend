@@ -29,8 +29,8 @@ app.use((request, response, next) => {
 
 var controllerProfessor = require('./controller/controller_professor.js')
 var controllerAluno = require('./controller/controller_aluno.js')
-
 var controllerUsuario = require('./controller/controller_usuario.js')
+var controllerCurso = require('./controller/controller_curso.js')
 
 var message = require('./controller/modulo/config.js')
 
@@ -335,6 +335,30 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 
 })
 
+/*********************************************CURSOS*********************************************** */
+app.get('/v1/projeto-mecanica-senai/curso', cors(), async function(request, response){
+
+})
+
+app.get('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function(request, response){
+
+})
+
+app.get('/v1/projeto-mecanica-senai/curso/nome/:nome', cors(), async function(request, response){
+
+})
+
+app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response){
+
+})
+
+app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
+
+})
+
+app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
+
+})
 /********************************************************* ENDPOPINTS **********************************************************/
 
 app.listen(8080, function () {
