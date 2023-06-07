@@ -88,10 +88,10 @@ const getProfessorByName = async function (nomeProfessor) {
 const inserirProfessor = async function (dadosProfessor) {
 
     //Validação para tratar campos obrigatórios e quantidade de caracteres
-    if (dadosProfessor.nome == '' || dadosProfessor.nome == undefined || dadosProfessor.nome.length > 150 || !isNaN(dadosProfessor.nome) ||
-        dadosProfessor.data_nascimento == '' || dadosProfessor.data_nascimento == undefined || dadosProfessor.data_nascimento.length > 10 ||
-        dadosProfessor.nif == '' || dadosProfessor.nif == undefined || dadosProfessor.nif.length > 10 || isNaN(dadosProfessor.nif) ||
-        dadosProfessor.id_usuario == '' || dadosProfessor.id_usuario == undefined || isNaN(dadosProfessor.id_usuario)
+    if (dadosProfessor.nome == ''               || dadosProfessor.nome == undefined             || dadosProfessor.nome.length > 150             || !isNaN(dadosProfessor.nome) ||
+        dadosProfessor.data_nascimento == ''    || dadosProfessor.data_nascimento == undefined  || dadosProfessor.data_nascimento.length > 10   ||
+        dadosProfessor.nif == ''                || dadosProfessor.nif == undefined              || dadosProfessor.nif.length > 10               || isNaN(dadosProfessor.nif) ||
+        dadosProfessor.id_usuario == ''         || dadosProfessor.id_usuario == undefined       || isNaN(dadosProfessor.id_usuario)
     ) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
@@ -156,7 +156,7 @@ const atualizarProfessor = async function (dadosProfessor, idProfessor) {
                 dadosProfessorJSON.status = message.SUCCESS_UPDATE_ITEM.status //200
                 dadosProfessorJSON.message = message.SUCCESS_UPDATE_ITEM.message
                 dadosProfessorJSON.professor = dadosProfessor
-
+                
                 return dadosProfessorJSON
 
             } else {
@@ -187,9 +187,7 @@ const deletarProfessor = async function (idProfessor) {
             let dadosProfessor = await professorDAO.deleteProfessor(idProfessor)
 
             if (dadosProfessor) {
-
                 return message.SUCCESS_DELETE_ITEM
-
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }

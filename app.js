@@ -95,7 +95,7 @@ app.post('v1/projeto-mecanica-senai/aluno', cors(), bodyParserJSON, async functi
     let contentType = request.header['content-type']
 
     //Validação para receber dados apenas no formato JSON
-    if(String(contentType).toLowerCase() == 'application/json') {
+    if (String(contentType).toLowerCase() == 'application/json') {
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
@@ -103,7 +103,7 @@ app.post('v1/projeto-mecanica-senai/aluno', cors(), bodyParserJSON, async functi
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
-    }else{
+    } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
     }
@@ -120,7 +120,7 @@ app.put('v1/projeto-mecanica-senai/aluno/:id', cors(), bodyParserJSON, async fun
     let contentType = request.header['content-type']
 
     //Validação para receber dados apenas no formato JSON
-    if(String(contentType).toLowerCase() == 'application/json'){
+    if (String(contentType).toLowerCase() == 'application/json') {
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
@@ -128,7 +128,7 @@ app.put('v1/projeto-mecanica-senai/aluno/:id', cors(), bodyParserJSON, async fun
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
-    }else{
+    } else {
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
     }
@@ -203,8 +203,10 @@ app.post('/v1/projeto-mecanica-senai/professor/', cors(), bodyParserJSON, async 
         response.json(dadosProfessor)
 
     } else {
+
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
     }
 
 })
@@ -271,36 +273,65 @@ app.get('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (req
 
 })
 
-app.post('v1/projeto-mecanica-senai/usuario', cors, bodyParserJSON, async function (request, response) {
+app.post('/v1/projeto-mecanica-senai/usuario/', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']
 
+    //Validação para receber dados apenas no formato JSON
     if (String(contentType).toLowerCase() == 'application/json') {
 
+        //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
-        let resultDadosUsuario = await controllerUsuario.inserirUsuario(dadosBody)
+        let dadosUsuario = await controllerUsuario.inserirUsuario(dadosBody)
 
-        response.status(resultDadosUsuario.status)
-        response.json(resultDadosUsuario)
+        response.status(dadosUsuario.status)
+        response.json(dadosUsuario)
+
     } else {
-        response.status(messages.ERROR_INVALID_CONTENT_TYPE.status)
-        response.json(messages.ERROR_INVALID_CONTENT_TYPE)
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
     }
 
 })
 
-app.put('v1/projeto-mecanica-senai/usuario:id', cors(), bodyParserJSON, async function (request, response) {
+app.put('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
-    //recebe o ID do usuario pelo parametro
-    let idUsuario = request.params.id
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe o ID do usuario pelo parametro
+        let idUsuario = request.params.id
+
+        let dadosBody = request.body
+
+        let dadosUsuario = await controllerUsuario.atualizarUsuario(dadosBody, idUsuario)
+
+        response.status(dadosUsuario.status)
+        response.json(dadosUsuario)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
 
 })
 
-app.delete('v1/projeto-mecanica-senai/usuario:id', cors(), async function (request, response) {
+app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (request, response) {
 
     //recebe o ID do usuario pelo parametro
     let idUsuario = request.params.id
+
+    let dadosUsuario = await controllerUsuario.deletarUsuario(idUsuario)
+
+    response.status(dadosUsuario.status)
+    response.json(dadosUsuario)
 
 })
 
