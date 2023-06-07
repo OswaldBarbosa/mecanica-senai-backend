@@ -14,12 +14,12 @@ var prisma = new PrismaClient()
 //Seleciona todos os professores dentro do banco de dados
 const selectAllProfessores = async function () {
 
-    let sql = `select tbl_professor.nome,
-               tbl_usuario.email, tbl_usuario.senha
+    let sql = `select tbl_professor.id, tbl_professor.nome, tbl_professor.data_nascimento,
+                      tbl_usuario.email, tbl_usuario.senha
     
-               from tbl_professor
-                    inner join tbl_usuario
-                          on tbl_usuario.id = tbl_professor.id_usuario;`
+                      from tbl_professor
+                           inner join tbl_usuario
+                                 on tbl_usuario.id = tbl_professor.id_usuario;`
 
     let resultadoProfessor = await prisma.$queryRawUnsafe(sql)
 
@@ -34,7 +34,7 @@ const selectAllProfessores = async function () {
 //Seleciona um professor específico dentro do banco de dados usando o id
 const selectProfessoreById = async function (id) {
 
-    let sql = `select tbl_professor.nome, tbl_professor.data_nascimento,
+    let sql = `select tbl_professor.id, tbl_professor.nome, tbl_professor.data_nascimento,
 	                  tbl_usuario.email, tbl_usuario.senha
     
                       from tbl_professor
@@ -54,7 +54,7 @@ const selectProfessoreById = async function (id) {
 //Seleciona um professor específico dentro do banco de dados usando o nome
 const selectProfessoreByName = async function (nomeProfessor) {
 
-    let sql = `select tbl_professor.nome, tbl_professor.data_nascimento,
+    let sql = `select tbl_professor.id, tbl_professor.nome, tbl_professor.data_nascimento,
                       tbl_usuario.email, tbl_usuario.senha
 
                       from tbl_professor
@@ -78,10 +78,12 @@ const insertProfessor = async function (dadosProfessor) {
     let sql = `insert into tbl_professor (
         nome,
         data_nascimento,
+        nif,
         id_usuario
         ) values (
         '${dadosProfessor.nome}',
         '${dadosProfessor.data_nascimento}',
+        '${dadosProfessor.nif}',
         '${dadosProfessor.id_usuario}'
         )`
 
@@ -99,14 +101,16 @@ const insertProfessor = async function (dadosProfessor) {
 //Atualiza os dados de um professor do banco de dados
 const updateProfessor = async function (dadosProfessor) {
 
+    //script para atualizar professor
     let sql = `update tbl_professor set
                nome = '${dadosProfessor.nome}',
                data_nascimento = '${dadosProfessor.data_nascimento}',
+               nif = '${dadosProfessor.nif}',
                id_usuario = '${dadosProfessor.id_usuario}'
                where id = '${dadosProfessor.id}'
                `
-
-    let resultadoProfessor = prisma.$executeRawUnsafe(sql)
+    //executa o script sql no banco de dados
+    let resultadoProfessor = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoProfessor) {
         return true
@@ -118,6 +122,16 @@ const updateProfessor = async function (dadosProfessor) {
 
 //Deleta o professor do banco de dados
 const deleteProfessor = async function (id) {
+
+    let sql = `delete from tbl_professor where id = ${id}`
+
+    let resultadoProfessor = await prisma.$queryRawUnsafe(sql)
+
+    if (resultadoProfessor) {
+        return true
+    } else {
+        return false
+    }
 
 }
 
@@ -142,5 +156,7 @@ module.exports = {
     selectProfessoreById,
     selectProfessoreByName,
     insertProfessor,
+    updateProfessor,
+    deleteProfessor,
     selectLastId
 }

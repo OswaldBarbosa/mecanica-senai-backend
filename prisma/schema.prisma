@@ -13,4 +13,4 @@ datasource db {
 model tbl_teste {
   id Int @id @default(autoincrement())
   nome String  
- }
+}

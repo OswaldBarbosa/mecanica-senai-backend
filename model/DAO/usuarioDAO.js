@@ -11,6 +11,51 @@ var { PrismaClient } = require('@prisma/client')
 //Criando instância do prisma
 var prisma = new PrismaClient()
 
+//Seleciona todos os professores dentro do banco de dados
+const selectAllUsuario = async function () {
+
+    let sql = `select tbl_usuario.id, tbl_usuario.email, tbl_usuario.senha,
+                      tbl_usuario_tipo.tipo
+            
+                      from tbl_usuario
+                           inner join tbl_usuario_tipo
+                                 on tbl_usuario_tipo.id = tbl_usuario.id_usuario_tipo;`
+
+    let resultadoUsuario = await prisma.$queryRawUnsafe(sql)
+
+    if (resultadoUsuario.length > 0) {
+        return resultadoUsuario
+    } else {
+        return false
+    }
+
+}
+
+//Seleciona um professor específico dentro do banco de dados usando o id
+const selectUsuarioById = async function (id) {
+
+    let sql = `select tbl_usuario.email, tbl_usuario.senha,
+                      tbl_usuario_tipo.tipo
+
+                      from tbl_usuario
+                           inner join tbl_usuario_tipo
+                                 on tbl_usuario_tipo.id = tbl_usuario.id_usuario_tipo where tbl_usuario.id = ${id}`
+
+    let resultadoUsuario = await prisma.$queryRawUnsafe(sql)
+
+    if (resultadoUsuario.length > 0) {
+        return resultadoUsuario
+    } else {
+        return false
+    }
+
+}
+
+//Seleciona um professor específico dentro do banco de dados usando o nome
+const selectUsuarioByName = async function (nomeUsuario) {
+
+}
+
 //Insere dados professor dentro do banco de dados
 const insertUsuario = async function (dadosUsuario) {
 
@@ -45,21 +90,6 @@ const deleteUsuario = async function (id) {
 
 }
 
-//Seleciona todos os professores dentro do banco de dados
-const selectAllUsuario = async function () {
-
-}
-
-//Seleciona um professor específico dentro do banco de dados usando o id
-const selectUsuarioById = async function (id) {
-
-}
-
-//Seleciona um professor específico dentro do banco de dados usando o nome
-const selectUsuarioByName = async function (nomeUsuario) {
-
-}
-
 const selectLastId = async function () {
     //script para pegar o ultimo ID inserido na tabela de alunos
     let sql = `select * from tbl_usuario order by id desc limit 1;`
@@ -75,6 +105,6 @@ const selectLastId = async function () {
 }
 
 module.exports = {
-    insertUsuario,
-    selectLastId
+    selectAllUsuario,
+    selectUsuarioById
 }

@@ -1,2 +1,0 @@
-# mecanica-senai-backend
-
