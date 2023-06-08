@@ -42,16 +42,17 @@ const bodyParserJSON = bodyParser.json()
 /********************************************************* ENDPOPINTS - ALUNOS **********************************************************/
 
 //endpoint: Retorna todos os alunos registrados no banco
-app.get('/v1/projeto-mecanica-senai/aluno', cors(), async function (request, response) {
+app.get('/v1/projeto-mecanica-senai/aluno/', cors(), async function (request, response) {
 
     let dadosAluno = await controllerAluno.getAlunos()
 
     response.status(dadosAluno.status)
     response.json(dadosAluno)
+
 })
 
-//endpoint: Retorna um aluno específico pelo ID
-app.get('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (request, response) {
+//endpoint: retorna um aluno específico pelo ID
+app.get('/v1/projeto-mecanica-senai/aluno/id/:id', cors(), async function (request, response) {
 
     //recebe o ID  do aluno pelo parametro
     let idAluno = request.params.id
@@ -63,21 +64,8 @@ app.get('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (request, 
 
 })
 
-//endpoint: Retorna um aluno específico pelo MATRICULA
-app.get('v1/projeto-mecanica-senai/aluno/:matricula', cors(), async function (request, response) {
-
-    //recebe o ID  do aluno pelo parametro
-    let matriculaAluno = request.params.matricula
-
-    let dadosAluno = await controllerAluno.getAlunoByMatricula(matriculaAluno)
-
-    response.status(dadosAluno.status)
-    response.json(dadosAluno)
-
-})
-
-//endpoint: Retorna um aluno específico pelo NOME
-app.get('v1/projeto-mecanica-senai/aluno/nome/:nome', cors(), async function (request, response) {
+//endpoint: retorna um aluno específico pelo NOME
+app.get('/v1/projeto-mecanica-senai/aluno/nome/:nome', cors(), async function (request, response) {
 
     //recebe o NOME do aluno pelo parametro
     let nomeAluno = request.params.nome
@@ -89,25 +77,41 @@ app.get('v1/projeto-mecanica-senai/aluno/nome/:nome', cors(), async function (re
 
 })
 
-//endpoint: Insere um novo aluno no banco de dados
-app.post('v1/projeto-mecanica-senai/aluno', cors(), bodyParserJSON, async function (request, response) {
+//endpoint: Retorna um aluno específico pelo MATRICULA
+app.get('/v1/projeto-mecanica-senai/aluno/matricula/:matricula', cors(), async function (request, response) {
 
-    let contentType = request.header['content-type']
+    //recebe o ID  do aluno pelo parametro
+    let matriculaAluno = request.params.matricula
+
+    let dadosAluno = await controllerAluno.getAlunoByMatricula(matriculaAluno)
+
+    response.status(dadosAluno.status)
+    response.json(dadosAluno)
+
+})
+
+//endpoint: Insere um novo aluno no banco de dados
+app.post('/v1/projeto-mecanica-senai/aluno', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
 
     //Validação para receber dados apenas no formato JSON
     if (String(contentType).toLowerCase() == 'application/json') {
+
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
-        let resultadoDadosAluno = controllerAluno.atualizarAluno(dadosBody)
+        let resultadoDadosAluno = await controllerAluno.inserirAluno(dadosBody)
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
+
     } else {
+
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
-    }
 
+    }
 
 })
 
