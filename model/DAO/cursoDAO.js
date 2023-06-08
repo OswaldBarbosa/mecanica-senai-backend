@@ -22,7 +22,7 @@ const selectAllCursos = async function(){
                        tbl_curso.descricao from tbl_curso;`
 
 
-    let resultadoCurso = prisma.$executeRawUnsafe(sql)
+    let resultadoCurso = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoCurso)
         return resultadoCurso
@@ -40,7 +40,7 @@ const selectCursoById = async function(id){
        tbl_curso.descricao from tbl_curso
         where id = ${id};`
 
-        let resultadoCurso = prisma.$executeRawUnsafe(sql)
+        let resultadoCurso = await prisma.$queryRawUnsafe(sql)
 
         if(resultadoCurso)
             return resultadoCurso
@@ -58,7 +58,7 @@ const selectCursoByName = async function(nomeCurso){
        tbl_curso.descricao from tbl_curso
         where nome like = '%${nomeCurso}%';`
 
-    let resultadoCurso = prisma.$executeRawUnsafe(sql)
+    let resultadoCurso = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoCurso)
         return resultadoCurso
@@ -70,7 +70,7 @@ const selectLastId = async function(){
     
     let sql = `select * from tbl_curso order by id desc limit 1;`
 
-    let resultadoAluno = prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoAluno)
         return resultadoAluno
@@ -93,7 +93,7 @@ const insertCurso = async function(dadosCurso){
                                         '${dadosCurso.descricao}'
                                         );`
 
-    let resultadoCurso = prisma.$executeRawUnsafe(sql)
+    let resultadoCurso = await prisma.$executeRawUnsafe(sql)
 
     if(resultadoCurso)
         return resultadoCurso
@@ -110,7 +110,7 @@ const updateCurso = async function(dadosCurso){
                     descricao = '${dadosCurso.descricao}'
                     where id = '${dadosCurso.id}'`
     
-    let resultadoCurso = prisma.$executeRawUnsafe(sql)
+    let resultadoCurso = await prisma.$executeRawUnsafe(sql)
 
     if(resultadoCurso)
         return resultadoCurso
@@ -122,7 +122,7 @@ const deleteCurso = async function(id){
     
     let sql = `delete from tbl_aluno where id = '${id}'`
 
-    let resultadoCurso = prisma.$executeRawUnsafe(sql)
+    let resultadoCurso = await prisma.$executeRawUnsafe(sql)
 
     if(resultadoCurso)
         return resultadoCurso
@@ -136,5 +136,6 @@ module.exports = {
     selectCursoByName,
     insertCurso,
     updateCurso,
-    deleteCurso
+    deleteCurso,
+    selectLastId
 }

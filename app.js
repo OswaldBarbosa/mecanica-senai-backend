@@ -337,27 +337,90 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 
 /*********************************************CURSOS*********************************************** */
 app.get('/v1/projeto-mecanica-senai/curso', cors(), async function(request, response){
+    
+    let dadosCurso = await controllerCurso.getCursos()
 
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 
 app.get('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function(request, response){
 
+    let idCurso = request.params.id
+
+    let dadosCurso = await controllerCurso.getCursosById(id)
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 
 app.get('/v1/projeto-mecanica-senai/curso/nome/:nome', cors(), async function(request, response){
 
+    let nomeCurso = request.params.nome
+
+    let dadosCurso = await controllerCurso.getCursosByName
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 
 app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response){
 
+    
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe os dados do aluno encaminhado no corpo da requisição
+        let dadosBody = request.body
+
+        let dadosCurso = await controllerCurso.inserirCurso(dadosBody)
+
+        response.status(dadosCurso.status)
+        response.json(dadosCurso)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
 })
 
 app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
 
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe o ID do usuario pelo parametro
+        let idCurso = request.params.id
+
+        let dadosBody = request.body
+
+        let dadosCurso = await controllerCurso.updateCurso(dadosBody, idCurso)
+
+        response.status(dadosCurso.status)
+        response.json(dadosCurso)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
 })
 
 app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
+    //recebe o ID do usuario pelo parametro
+    let idCurso = request.params.id
 
+    let dadosCurso = await controllerCurso.deletarCurso(idCurso)
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 /********************************************************* ENDPOPINTS **********************************************************/
 

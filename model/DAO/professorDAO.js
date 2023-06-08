@@ -107,7 +107,7 @@ const updateProfessor = async function (dadosProfessor) {
                data_nascimento = '${dadosProfessor.data_nascimento}',
                nif = '${dadosProfessor.nif}',
                id_usuario = '${dadosProfessor.id_usuario}'
-               where id = '${dadosProfessor.id}'
+               where id = ${dadosProfessor.id}
                `
     //executa o script sql no banco de dados
     let resultadoProfessor = await prisma.$executeRawUnsafe(sql)

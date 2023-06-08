@@ -25,7 +25,7 @@ const selectAllAlunos = async function () {
                         inner join tbl_usuario
                             on tbl_usuario.id = tbl_matricula.id_usuario;`
 
-    let resultadoAluno = prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoAluno.length > 0)
         return resultadoAluno
@@ -50,7 +50,7 @@ const selectAlunoById = async function (id) {
                         on tbl_usuario.id = tbl_matricula.id_usuario;
                              where id = '${id}'`
 
-    let resultadoAluno = prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoAluno.length > 0)
         return resultadoAluno
@@ -111,7 +111,7 @@ const deleteAluno = async function (id) {
 
     let sql = `delete from tbl_aluno where id = '${id}'`
 
-    let resultadoAluno = prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoAluno)
         resultadoAluno
@@ -123,7 +123,7 @@ const deleteAluno = async function (id) {
 const selectLastId = async function () {
     let sql = `select * from tbl_aluno order by id desc limit 1;`
 
-    let resultAluno = prisma.$executeRawUnsafe(sql)
+    let resultAluno = await prisma.$executeRawUnsafe(sql)
 
     if (resultAluno.length > 0) {
         return resultAluno
@@ -141,7 +141,7 @@ const selectAlunoByMatricula = async function (matriculaAluno) {
                     inner join tbl_aluno
                     on tbl_aluno.id = tbl_matricula.id_aluno where tbl_matricula.numero = ${matriculaAluno}`
 
-    const resultadoAluno = prisma.$executeRawUnsafe(sql)
+    const resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoAluno.length > 0) {
         return resultadoAluno

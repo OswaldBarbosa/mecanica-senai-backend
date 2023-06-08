@@ -52,7 +52,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
     } else {
         dadosAluno.id = idAluno
 
-        let statusId = await alunoDAO.selectLastId(id)
+        let statusAluno = await alunoDAO.selectAlunoById(id)
 
         if (statusId) {
 
@@ -63,7 +63,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
             if (resultadoDadosAluno) {
                 dadosAlunoJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosAlunoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosAlunoJSON.aluno = resultaDadosProfessor
+                dadosAlunoJSON.alunoAtualizado = statusAluno
 
                 return dadosAlunoJSON
             } else {
