@@ -127,7 +127,7 @@ const updateAluno = async function (dadosAluno) {
     let sql = `update tbl_aluno set 
                 nome = '${dadosAluno.nome}',
                 data_nascimento = '${dadosAluno.data_nascimento}'
-                where id = '${dadosAluno.id};'`
+                where id = ${dadosAluno.id}`
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
@@ -140,7 +140,7 @@ const updateAluno = async function (dadosAluno) {
 //Deleta o professor do banco de dados
 const deleteAluno = async function (id) {
 
-    let sql = `delete from tbl_aluno where id = '${id}'`
+    let sql = `delete from tbl_aluno where id = ${id}`
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 

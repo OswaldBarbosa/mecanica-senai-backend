@@ -31,6 +31,7 @@ var controllerProfessor = require('./controller/controller_professor.js')
 var controllerAluno = require('./controller/controller_aluno.js')
 var controllerUsuario = require('./controller/controller_usuario.js')
 var controllerCurso = require('./controller/controller_curso.js')
+var controllerMateria = require('./controller/controller_materia.js')
 
 var message = require('./controller/modulo/config.js')
 
@@ -340,7 +341,7 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 })
 
 /*********************************************CURSOS*********************************************** */
-app.get('/v1/projeto-mecanica-senai/curso', cors(), async function(request, response){
+app.get('/v1/projeto-mecanica-senai/curso/', cors(), async function(request, response){
     
     let dadosCurso = await controllerCurso.getCursos()
 
@@ -425,6 +426,93 @@ app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, as
 
     response.status(dadosCurso.status)
     response.json(dadosCurso)
+})
+
+/***************************************************END POINT MATERIA *****************************************/
+
+app.get('/v1/projeto-mecanica-senai/materia/', cors(), async function(request,response){
+
+    let dadosMateria = await controllerMateria.getMaterias()
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+app.get('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function(request, response){
+    let idMateria = request.params.id
+
+    let dadosMateria = await controllerMateria.getMateriaById(idMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+app.get('/v1/projeto-mecanica-senai/materia/sigla/:sigla', cors(), async function(request, response){
+
+    let siglaMateria = request.params.sigla
+
+    let dadosMateria = await controllerMateria.getMateriaBySigla(siglaMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+app.get('/v1/projeto-mecanica-senai/materia/nome/:nome', cors(), async function(request,response){
+
+    let nomeMateria = request.params.nome
+
+    let dadosMateria = await controllerMateria.getMateriaByName(nomeMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+app.post('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosMateria = controllerMateria.inserirMatricula(dadosBody)
+
+        response.status(dadosMateria.status)
+        response.json(dadosMateria)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+})
+
+app.put('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosMateria = controllerMateria.updateMateria(dadosBody)
+
+        response.status(dadosMateria.status)
+        response.json(dadosMateria)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+    
+})
+
+app.delete('/v1/projeto-mecanica-senai/materia/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let idMateria = request.params.id
+
+    let dadosMateria = controllerMateria.deleteMateria(idMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
 })
 /********************************************************* ENDPOPINTS **********************************************************/
 
