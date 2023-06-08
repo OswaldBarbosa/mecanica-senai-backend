@@ -11,6 +11,67 @@ var { PrismaClient } = require('@prisma/client')
 //Criando instância do prisma
 var prisma = new PrismaClient()
 
+
+//Seleciona todos os professores dentro do banco de dados
+const selectAllAlunos = async function () {
+
+    let sql = `select    tbl_aluno.nome,
+                        tbl_matricula.numero,
+                        tbl_usuario.email, tbl_usuario.senha
+
+                        from    tbl_aluno
+                        inner join tbl_matricula
+                            on tbl_aluno.id = tbl_matricula.id_aluno
+                        inner join tbl_usuario
+                            on tbl_usuario.id = tbl_matricula.id_usuario;`
+
+    let resultadoAluno = prisma.$executeRawUnsafe(sql)
+
+    if (resultadoAluno.length > 0)
+        return resultadoAluno
+    else
+        return false
+
+
+
+}
+
+//Seleciona um professor específico dentro do banco de dados usando o id
+const selectAlunoById = async function (id) {
+
+    let sql = `select    tbl_aluno.nome,
+                        tbl_matricula.numero,
+                        tbl_usuario.email, tbl_usuario.senha
+
+                        from    tbl_aluno
+                        inner join tbl_matricula
+                        on tbl_aluno.id = tbl_matricula.id_aluno
+                        inner join tbl_usuario
+                        on tbl_usuario.id = tbl_matricula.id_usuario;
+                             where id = '${id}'`
+
+    let resultadoAluno = prisma.$executeRawUnsafe(sql)
+
+    if (resultadoAluno.length > 0)
+        return resultadoAluno
+    else
+        return false
+}
+
+//Seleciona um professor específico dentro do banco de dados usando o nome
+const selectAlunoByName = async function (nomeALuno) {
+
+    const sql = `select tbl_aluno.nome, tbl_aluno.data_nascimento
+                where tbl_aluno.nome like '%${nomeALuno}%' `
+
+    const resultadoAluno = prisma.$executeRawUnsafe(sql)
+
+    if (resultadoAluno)
+        return resultadoAluno
+    else
+        return false
+}
+
 //Insere dados professor dentro do banco de dados
 const insertAluno = async function (dadosAluno) {
 
@@ -52,61 +113,12 @@ const deleteAluno = async function (id) {
 
     let resultadoAluno = prisma.$executeRawUnsafe(sql)
 
-    if(resultadoAluno)
+    if (resultadoAluno)
         resultadoAluno
     else
         false
 }
 
-//Seleciona todos os professores dentro do banco de dados
-const selectAllAlunos = async function () {
-
-    let sql = `select tbl_aluno.nome, tbl_aluno.data_nascimento,
-                                tbl_usuario.email, tbl_usuario.email
-                                
-                                from tbl_aluno`
-
-    let resultadoAluno = prisma.$executeRawUnsafe(sql)
-
-    if (resultadoAluno.length > 0)
-        return resultadoAluno
-    else
-        return false
-
-
-
-}
-
-//Seleciona um professor específico dentro do banco de dados usando o id
-const selectAlunoById = async function (id) {
-
-    let sql = `select tbl_aluno.nome, tbl_aluno.data_nascimento,
-                            tbl_usuario.email, tbl_usuario.senha
-
-                            from tbl_aluno
-                             where id = '${id}'`
-
-    let resultadoAluno = prisma.$executeRawUnsafe(sql)
-
-    if (resultadoAluno.length > 0)
-        return resultadoAluno
-    else
-        return false
-}
-
-//Seleciona um professor específico dentro do banco de dados usando o nome
-const selectAlunoByName = async function (nomeALuno) {
-
-    const sql = `select tbl_aluno.nome, tbl_aluno.data_nascimento
-                where tbl_aluno.nome like '%${nomeALuno}%' `
-
-    const resultadoAluno = prisma.$executeRawUnsafe(sql)
-
-    if(resultadoAluno)
-        return resultadoAluno
-    else
-        return false
-}
 
 const selectLastId = async function () {
     let sql = `select * from tbl_aluno order by id desc limit 1;`

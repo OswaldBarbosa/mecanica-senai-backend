@@ -9,10 +9,30 @@ var cursoDAO = require('../model/DAO/cursoDAO.js')
 var message = require('./modulo/config.js')
 
 const getCursos = async function(){
+    let dadosCursoJSON = {}
+
+    let dadosCurso = await cursoDAO.selectAllCursos()
+
+    if(dadosCurso){
+
+        dadosCursoJSON.status = message.SUCCESS_REQUEST.status
+        dadosCursoJSON.message = message.SUCCESS_REQUEST.message
+        dadosCursoJSON.cursos = dadosCurso
+        
+        return dadosCursoJSON
+    }else{
+        return message.ERROR_NOT_FOUND
+    }
 
 }
 
-const getCursosById = async function(){
+const getCursosById = async function(id){
+
+    let dadosCursoJSON = {}
+
+    if(id == '' || id == undefined || !isNaN(id)){
+
+    }
 
 }
 
