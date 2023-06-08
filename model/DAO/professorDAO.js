@@ -85,7 +85,7 @@ const insertProfessor = async function (dadosProfessor) {
         '${dadosProfessor.data_nascimento}',
         '${dadosProfessor.nif}',
         '${dadosProfessor.id_usuario}'
-        )`
+        );`
 
     //executa o script sql no banco de dados
     let resultadoProfessor = await prisma.$executeRawUnsafe(sql)

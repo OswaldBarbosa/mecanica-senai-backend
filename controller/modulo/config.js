@@ -21,7 +21,7 @@ const ERROR_INTERNAL_SERVER         = {status: 500, message: 'Devido a um erro i
 
 const ERROR_INVALID_CONTENT_TYPE    = {status: 415, message: 'O tipo de mídia Content-type da solicitação não é compatível com o servidor. Tipo aceito:[application/json]'}
 
-const ERROR_INVALID_REGISTRATION    = {status: 400, message: 'O tipo de atributo enviado não é valido'}
+const ERROR_INVALID_MATRICULA    = {status: 400, message: 'O número da matricula informado na requisição não é válido ou não foi encaminhado.'}
 
 /******************************************************** MENSAGENS DE ERRO ********************************************************/
 
@@ -45,7 +45,7 @@ module.exports = {
     ERROR_INVALID_CONTENT_TYPE,
     ERROR_ID_NOT_FOUND,
     ERROR_NOT_FOUND,
-    ERROR_INVALID_REGISTRATION,
+    ERROR_INVALID_MATRICULA,
     SUCCESS_CREATE_ITEM,
     SUCCESS_UPDATE_ITEM,
     SUCCESS_DELETE_ITEM,

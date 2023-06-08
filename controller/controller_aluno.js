@@ -7,6 +7,101 @@
 
 var message = require('../controller/modulo/config.js')
 var alunoDAO = require('../model/DAO/alunoDAO.js')
+
+//Função que retorna a lista de todos os alunos existentes dentro de nosso banco de dados
+const getAlunos = async function () {
+
+    let dadosAlunoJSON = {}
+
+    let dadosAluno = await alunoDAO.selectAllAlunos()
+
+    if (dadosAluno) {
+        dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
+        dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
+        dadosAlunoJSON.quantidade = dadosAluno.length
+        dadosAlunoJSON.alunos = dadosAluno
+
+        return dadosAlunoJSON
+
+    } else {
+        return message.ERROR_NOT_FOUND
+    }
+}
+
+//Função que retorna um aluno específico pelo id
+const getAlunoById = async function (idAluno) {
+
+    let dadosAlunoJSON = {}
+
+    if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
+        return message.ERROR_INVALID_ID
+    } else {
+
+        let dadosAluno = await alunoDAO.selectAlunoById(idAluno)
+
+        if (dadosAluno) {
+
+            dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoJSON.aluno = dadosAluno
+
+            return dadosAlunoJSON
+
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
+//Função que retorna um aluno específico pelo nome
+const getAlunoByName = async function (nomeAluno) {
+
+    let dadosAlunoJSON = {}
+
+    if (nomeAluno == '' || nomeAluno == undefined || !isNaN(nomeAluno)) {
+        return message.ERROR_INVALID_NAME
+    } else {
+
+        let dadosAluno = await alunoDAO.selectAlunoByName(nomeAluno)
+
+        if (dadosAluno) {
+
+            dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoJSON.alunos = dadosAluno
+
+            return dadosAlunoJSON
+
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
+const getAlunoByMatricula = async function (matriculaAluno) {
+
+    let dadosAlunoJSON = {}
+
+    if (matriculaAluno == '' || matriculaAluno == undefined || isNaN(matriculaAluno) || matriculaAluno.length > 8) {
+        return message.ERROR_INVALID_MATRICULA
+    } else {
+
+        let dadosAluno = await alunoDAO.selectAlunoByMatricula(matriculaAluno)
+
+        if (dadosAluno) {
+
+            dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
+            dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
+            dadosAlunoJSON.aluno = dadosAluno
+
+            return dadosAlunoJSON
+
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
+
 //Função que insere um novo aluno
 const inserirAluno = async function (dadosAluno) {
 
@@ -17,7 +112,7 @@ const inserirAluno = async function (dadosAluno) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
 
-        let resultadoDadosAluno = await alunoDAO.insertAluno()
+        let resultadoDadosAluno = await alunoDAO.insertAluno(dadosAluno)
 
         if (resultadoDadosAluno) {
 
@@ -31,11 +126,11 @@ const inserirAluno = async function (dadosAluno) {
             dadosAlunoJSON.aluno = novoAluno
 
             return dadosAlunoJSON
+
         } else {
             return message.ERROR_INTERNAL_SERVER
         }
     }
-
 
 }
 
@@ -77,12 +172,12 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 
 //Função que deleta um aluno existente
 const deletarAluno = async function (idAluno) {
-    if(idAluno == undefined || idAluno == '' || isNaN(idAluno)){
+    if (idAluno == undefined || idAluno == '' || isNaN(idAluno)) {
         return message.ERROR_INVALID_ID
-    }else{
+    } else {
         let dadosAlunoJSON = {}
 
-        
+
         let alunoDeletado = await alunoDAO.selectAlunoById(idAluno)
         let dadosAluno = await alunoDAO.deleteAluno(idAluno)
 
@@ -90,78 +185,6 @@ const deletarAluno = async function (idAluno) {
         dadosAlunoJSON.message(message.SUCCESS_DELETE_ITEM.message)
         dadosAlunoJSON.alunoDeletado = alunoDeletado
 
-    }
-}
-
-//Função que retorna a lista de todos os alunos existentes dentro de nosso banco de dados
-const getAlunos = async function () {
-    let dadosAlunoJSON = {}
-
-    let dadosAluno = await alunoDAO.selectAllAlunos()
-
-    if(dadosAluno){
-        dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
-            dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
-            dadosAlunoJSON.alunos = dadosAluno
-            
-            return dadosAlunoJSON
-    
-    }else{
-        return message.ERROR_NOT_FOUND
-    }
-}
-
-//Função que retorna um aluno específico pelo id
-const getAlunoById = async function (id) {
-
-    if(id == '' || id == undefined || isNaN(id)){
-        return message.ERROR_INVALID_ID
-    }else{
-        let dadosAluno = await alunoDAO.selectAlunoById(id)
-    //boa
-
-        let dadosAlunoJSON = {}
-
-        dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
-        dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
-        dadosAlunoJSON.aluno = dadosAluno
-
-        return dadosAluno
-    }
-}
-
-//Função que retorna um aluno específico pelo nome
-const getAlunoByName = async function (nomeAluno) {
-
-    if(nomeAluno == '' || nomeAluno == undefined || !isNaN(nomeAluno)){
-        return message.ERROR_INVALID_NAME
-    }else{
-        let dadosAluno = await alunoDAO.selectAlunoByName(nomeAluno)
-
-        let dadosAlunoJSON = {}
-
-        dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
-        dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
-        dadosAlunoJSON.alunos = dadosAluno
-
-        return dadosAlunoJSON
-    }
-
-}
-
-const getAlunoByMatricula = async function(matriculaAluno){
-    if(matriculaAluno == undefined || matriculaAluno == '' || isNaN(matriculaAluno)){
-        return message.ERROR_INVALID_REGISTRATION
-    }else{
-        let dadosAluno = await alunoDAO.selectAlunoByMatricula(matriculaAluno)
-
-        let dadosAlunoJSON = {}
-
-        dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
-        dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
-        dadosAlunoJSON.aluno = dadosAluno
-
-        return dadosAlunoJSON
     }
 }
 

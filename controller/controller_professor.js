@@ -28,7 +28,6 @@ const getProfessores = async function () {
     } else {
         return message.ERROR_NOT_FOUND
     }
-
 }
 
 //Função que retorna um professor específico pelo id
@@ -52,9 +51,7 @@ const getProfessorById = async function (idProfessor) {
         } else {
             return message.ERROR_NOT_FOUND
         }
-
     }
-
 }
 
 //Função que retorna um professor específico pelo nome
@@ -79,9 +76,7 @@ const getProfessorByName = async function (nomeProfessor) {
         } else {
             return message.ERROR_NOT_FOUND
         }
-
     }
-
 }
 
 //Função que insere um novo professor
