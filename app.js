@@ -31,6 +31,7 @@ var controllerProfessor = require('./controller/controller_professor.js')
 var controllerAluno = require('./controller/controller_aluno.js')
 var controllerUsuario = require('./controller/controller_usuario.js')
 var controllerCurso = require('./controller/controller_curso.js')
+var controllerMateria = require('./controller/controller_materia.js')
 
 var message = require('./controller/modulo/config.js')
 
@@ -332,28 +333,71 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 })
 
 /*********************************************CURSOS*********************************************** */
-app.get('/v1/projeto-mecanica-senai/curso', cors(), async function (request, response) {
+app.get('/v1/projeto-mecanica-senai/curso', cors(), async function(request, response){
 
 })
 
 app.get('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function (request, response) {
 
+    let idCurso = request.params.id
+
+    let dadosCurso = await controllerCurso.getCursosById(id)
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 
 app.get('/v1/projeto-mecanica-senai/curso/nome/:nome', cors(), async function (request, response) {
 
+    let nomeCurso = request.params.nome
+
+    let dadosCurso = await controllerCurso.getCursosByName
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 
-app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response) {
+app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response){
 
 })
 
 app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe o ID do usuario pelo parametro
+        let idCurso = request.params.id
+
+        let dadosBody = request.body
+
+        let dadosCurso = await controllerCurso.updateCurso(dadosBody, idCurso)
+
+        response.status(dadosCurso.status)
+        response.json(dadosCurso)
+
+    } else {
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
 })
 
-app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request, response) {
+app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
 
+})
+
+app.delete('/v1/projeto-mecanica-senai/materia/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let idMateria = request.params.id
+
+    let dadosMateria = controllerMateria.deleteMateria(idMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
 })
 /********************************************************* ENDPOPINTS **********************************************************/
 
