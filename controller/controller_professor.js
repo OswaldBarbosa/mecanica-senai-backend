@@ -179,9 +179,9 @@ const deletarProfessor = async function (idProfessor) {
 
         if (statusId) {
 
-            let dadosProfessor = await professorDAO.deleteProfessor(idProfessor)
+            let resultadoDadosProfessor = await professorDAO.deleteProfessor(idProfessor)
 
-            if (dadosProfessor) {
+            if (resultadoDadosProfessor) {
                 return message.SUCCESS_DELETE_ITEM
             } else {
                 return message.ERROR_INTERNAL_SERVER

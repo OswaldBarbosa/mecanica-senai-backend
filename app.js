@@ -75,18 +75,6 @@ app.get('/v1/projeto-mecanica-senai/aluno/nome/:nome', cors(), async function (r
     response.status(dadosAluno.status)
     response.json(dadosAluno)
 
-})
-
-//endpoint: Retorna um aluno específico pelo MATRICULA
-app.get('/v1/projeto-mecanica-senai/aluno/matricula/:matricula', cors(), async function (request, response) {
-
-    //recebe o ID  do aluno pelo parametro
-    let matriculaAluno = request.params.matricula
-
-    let dadosAluno = await controllerAluno.getAlunoByMatricula(matriculaAluno)
-
-    response.status(dadosAluno.status)
-    response.json(dadosAluno)
 
 })
 
@@ -116,31 +104,35 @@ app.post('/v1/projeto-mecanica-senai/aluno', cors(), bodyParserJSON, async funct
 })
 
 //endpoint: Atualiza um aluno no banco de dados
-app.put('v1/projeto-mecanica-senai/aluno/:id', cors(), bodyParserJSON, async function (request, response) {
+app.put('/v1/projeto-mecanica-senai/aluno/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
-    //recebe o ID  do aluno pelo parametro
-    let idAluno = request.params.id
-
-    let contentType = request.header['content-type']
+    let contentType = request.headers['content-type']
 
     //Validação para receber dados apenas no formato JSON
     if (String(contentType).toLowerCase() == 'application/json') {
+
         //recebe os dados do aluno encaminhado no corpo da requisição
         let dadosBody = request.body
 
-        let resultadoDadosAluno = controllerAluno.updateAluno(dadosBody, idAluno)
+        //recebe o ID  do aluno pelo parametro
+        let idAluno = request.params.id
+
+        let resultadoDadosAluno = await controllerAluno.atualizarAluno(dadosBody, idAluno)
 
         response.status(resultadoDadosAluno.status)
         response.json(resultadoDadosAluno)
+
     } else {
+
         response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
         response.json(message.ERROR_INVALID_CONTENT_TYPE.message)
+
     }
 
 })
 
 //endpoint: Deleta um aluno no banco de dados
-app.delete('v1/projeto-mecanica-senai/aluno/:id', cors(), async function (request, response) {
+app.delete('/v1/projeto-mecanica-senai/aluno/id/:id', cors(), async function (request, response) {
 
     //recebe o ID  do aluno pelo parametro
     let idAluno = request.params.id
@@ -340,27 +332,27 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 })
 
 /*********************************************CURSOS*********************************************** */
-app.get('/v1/projeto-mecanica-senai/curso', cors(), async function(request, response){
+app.get('/v1/projeto-mecanica-senai/curso', cors(), async function (request, response) {
 
 })
 
-app.get('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function(request, response){
+app.get('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function (request, response) {
 
 })
 
-app.get('/v1/projeto-mecanica-senai/curso/nome/:nome', cors(), async function(request, response){
+app.get('/v1/projeto-mecanica-senai/curso/nome/:nome', cors(), async function (request, response) {
 
 })
 
-app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response){
+app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response) {
 
 })
 
-app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
+app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
 })
 
-app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
+app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
 })
 /********************************************************* ENDPOPINTS **********************************************************/

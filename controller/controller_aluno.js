@@ -78,35 +78,13 @@ const getAlunoByName = async function (nomeAluno) {
     }
 }
 
-const getAlunoByMatricula = async function (matriculaAluno) {
-
-    let dadosAlunoJSON = {}
-
-    if (matriculaAluno == '' || matriculaAluno == undefined || isNaN(matriculaAluno) || matriculaAluno.length > 8) {
-        return message.ERROR_INVALID_MATRICULA
-    } else {
-
-        let dadosAluno = await alunoDAO.selectAlunoByMatricula(matriculaAluno)
-
-        if (dadosAluno) {
-
-            dadosAlunoJSON.status = message.SUCCESS_REQUEST.status
-            dadosAlunoJSON.message = message.SUCCESS_REQUEST.message
-            dadosAlunoJSON.aluno = dadosAluno
-
-            return dadosAlunoJSON
-
-        } else {
-            return message.ERROR_NOT_FOUND
-        }
-    }
-}
-
 //Função que insere um novo aluno
 const inserirAluno = async function (dadosAluno) {
 
     //Validação para tratar campos obrigatórios e quantidade de caracteres
     if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 150 || !isNaN(dadosAluno.nome) ||
+        dadosAluno.rg == '' || dadosAluno.rg == undefined || dadosAluno.rg.length > 9 || isNaN(dadosAluno.rg) ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 11 || isNaN(dadosAluno.cpf) ||
         dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10
     ) {
         return message.ERROR_REQUIRED_FIELDS
@@ -136,64 +114,84 @@ const inserirAluno = async function (dadosAluno) {
 
 //Função que atualiza um aluno existente
 const atualizarAluno = async function (dadosAluno, idAluno) {
+
     //Validação para tratar campos obrigatórios e quantidade de caracteres
     if (dadosAluno.nome == '' || dadosAluno.nome == undefined || dadosAluno.nome.length > 150 || !isNaN(dadosAluno.nome) ||
+        dadosAluno.rg == '' || dadosAluno.rg == undefined || dadosAluno.rg.length > 9 || isNaN(dadosAluno.rg) ||
+        dadosAluno.cpf == '' || dadosAluno.cpf == undefined || dadosAluno.cpf.length > 11 || isNaN(dadosAluno.cpf) ||
         dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10
     ) {
+
         return message.ERROR_REQUIRED_FIELDS
+
     } else if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
+
         return message.ERROR_INVALID_ID
 
     } else {
+
         dadosAluno.id = idAluno
 
-        let statusId = await alunoDAO.selectLastId(id)
+        let statusId = await alunoDAO.selectAlunoById(idAluno)
 
         if (statusId) {
 
-            let dadosAlunoJSON = {}
-
-            let resultaDadosProfessor = await alunoDAO.updateAluno(dadosAluno)
+            let resultadoDadosAluno = await alunoDAO.updateAluno(dadosAluno)
 
             if (resultadoDadosAluno) {
+
+                let dadosAlunoJSON = {}
+
                 dadosAlunoJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosAlunoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosAlunoJSON.aluno = resultaDadosProfessor
+                dadosAlunoJSON.aluno = dadosAluno
 
                 return dadosAlunoJSON
-            } else {
 
+            } else {
                 return message.ERROR_INTERNAL_SERVER
             }
 
+        } else {
+            return message.ERROR_ID_NOT_FOUND
         }
+
     }
+
 }
 
 //Função que deleta um aluno existente
 const deletarAluno = async function (idAluno) {
+
     if (idAluno == undefined || idAluno == '' || isNaN(idAluno)) {
         return message.ERROR_INVALID_ID
     } else {
-        let dadosAlunoJSON = {}
 
+        let statusId = await alunoDAO.selectLastId(idAluno)
 
-        let alunoDeletado = await alunoDAO.selectAlunoById(idAluno)
-        let dadosAluno = await alunoDAO.deleteAluno(idAluno)
+        if (statusId) {
 
-        dadosAlunoJSON.status(message.SUCCESS_DELETE_ITEM.status)
-        dadosAlunoJSON.message(message.SUCCESS_DELETE_ITEM.message)
-        dadosAlunoJSON.alunoDeletado = alunoDeletado
+            let resultadoDadosAluno = await alunoDAO.deleteAluno(idAluno)
+
+            if (resultadoDadosAluno) {
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
 
     }
+
 }
 
 module.exports = {
-    inserirAluno,
-    atualizarAluno,
     getAlunos,
     getAlunoById,
-    getAlunoByMatricula,
     getAlunoByName,
+    inserirAluno,
+    atualizarAluno,
     deletarAluno
 }
