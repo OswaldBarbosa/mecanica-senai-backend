@@ -1,12 +1,14 @@
 /***************************************************************************************
-* Objetivo: Controller para controlar aluno
+* Objetivo: Arquivo para fazer o controle dos dados de alunos de nosso sistema
 * Data: 23/05/2023
-* Autor: Vinícius Monteiro
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
-var message = require('../controller/modulo/config.js')
+
 var alunoDAO = require('../model/DAO/alunoDAO.js')
+
+var message = require('../controller/modulo/config.js')
 
 //Função que retorna a lista de todos os alunos existentes dentro de nosso banco de dados
 const getAlunos = async function () {

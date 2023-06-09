@@ -1,11 +1,12 @@
 /***************************************************************************************
-* Objetivo: Controller para controlar curso
+* Objetivo: Arquivo para fazer o controle dos dados de cursos de nosso sistema
 * Data: 23/05/2023
-* Autor: Vinícius Monteiro
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
 var cursoDAO = require('../model/DAO/cursoDAO.js')
+
 var message = require('./modulo/config.js')
 
 const getCursos = async function(){

@@ -1,11 +1,10 @@
 /***************************************************************************************
 * Objetivo: Arquivo para fazer o controle dos dados de usuarios de nosso sistema
 * Data: 23/05/2023
-* Autor: André Luiz e Oswaldão zika
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
-const e = require('express')
 var usuarioDAO = require('../model/DAO/usuarioDAO.js')
 
 var message = require('./modulo/config.js')

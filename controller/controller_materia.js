@@ -1,11 +1,12 @@
 /***************************************************************************************
-* Objetivo: Controller para controlar materia
+* Objetivo: Arquivo para fazer o controle dos dados de materias de nosso sistema
 * Data: 23/05/2023
-* Autor: Vinícius Monteiro
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
 var materiaDAO = require('../model/DAO/materiaDAO.js')
+
 var message = require('./modulo/config.js')
 
 //Função que retorna a lista de todas as materias

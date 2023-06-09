@@ -1,7 +1,7 @@
 /***************************************************************************************
-* Objetivo: Arquivo para fazer o controle dos dados de professores de nosso sistema
+* Objetivo: Arquivo para fazer o controle dos dados de matriculas de nosso sistema
 * Data: 23/05/2023
-* Autor: André Luiz e Oswaldão zika
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
@@ -108,7 +108,7 @@ const inserirMatricula = async function (dadosMatricula) {
             return dadosMatriculaJSON
 
         } else {
-            return message.ERROR_NOT_FOUND
+            return message.ERROR_INTERNAL_SERVER
         }
 
     }
@@ -173,7 +173,9 @@ const deletarMatricula = async function (idMatricula) {
             let dadosMatricula = await matriculaDAO.deleteMatricula(idMatricula)
 
             if (dadosMatricula) {
+                
                 return message.SUCCESS_DELETE_ITEM
+
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }
