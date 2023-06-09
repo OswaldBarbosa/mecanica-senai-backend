@@ -40,8 +40,8 @@ const selectProfessoreById = async function (idProfessor) {
                       from tbl_professor
                            inner join tbl_usuario
                                  on tbl_usuario.id = tbl_professor.id_usuario where tbl_professor.id = ${idProfessor};`
-    
-    let resultadoProfessor = await prisma.$queryRawUnsafe(sql)    
+
+    let resultadoProfessor = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoProfessor.length > 0) {
         return resultadoProfessor
@@ -60,8 +60,8 @@ const selectProfessoreByName = async function (nomeProfessor) {
                       from tbl_professor
                            inner join tbl_usuario
                                  on tbl_usuario.id = tbl_professor.id_usuario where tbl_professor.nome like '%${nomeProfessor}%';`
-    
-    let resultadoProfessor = await prisma.$queryRawUnsafe(sql)    
+
+    let resultadoProfessor = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoProfessor.length > 0) {
         return resultadoProfessor
@@ -101,14 +101,14 @@ const insertProfessor = async function (dadosProfessor) {
 //Atualiza os dados de um professor do banco de dados
 const updateProfessor = async function (dadosProfessor) {
 
-    //script para atualizar professor
-    let sql = `update tbl_professor set
-               nome = '${dadosProfessor.nome}',
-               data_nascimento = '${dadosProfessor.data_nascimento}',
-               nif = '${dadosProfessor.nif}',
-               id_usuario = '${dadosProfessor.id_usuario}'
-               where id = ${dadosProfessor.id}
-               `
+    let sql = ` update tbl_professor set 
+                nome = '${dadosProfessor.nome}',
+                data_nascimento = '${dadosProfessor.data_nascimento}',
+                nif = '${dadosProfessor.nif}',
+                id_usuario = '${dadosProfessor.id_usuario}'
+                where id = '${dadosProfessor.id}'
+                `   
+
     //executa o script sql no banco de dados
     let resultadoProfessor = await prisma.$executeRawUnsafe(sql)
 
@@ -135,7 +135,7 @@ const deleteProfessor = async function (idProfessor) {
 
 }
 
-const selectLastId = async () => {
+const selectLastId = async function () {
 
     //script para pegar o ultimo ID inserido na tabela de alunos
     let sql = `select * from tbl_professor order by id desc limit 1 ;`

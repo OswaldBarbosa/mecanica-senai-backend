@@ -8,11 +8,9 @@
 //Import do Prisma
 var {PrismaClient} = require('@prisma/client')
 
-
 //Criação da instancia prisma
 var prisma = new PrismaClient()
 
-//DAOS
 const selectAllCursos = async function(){
 
     let sql = `select 

@@ -1,4 +1,4 @@
-        /***************************************************************************************
+/***************************************************************************************
 * Objetivo: Arquivo para fazer o controle dos dados de professores de nosso sistema
 * Data: 23/05/2023
 * Autor: André Luiz e Oswaldão zika
@@ -88,7 +88,9 @@ const inserirProfessor = async function (dadosProfessor) {
         dadosProfessor.nif == ''                || dadosProfessor.nif == undefined              || dadosProfessor.nif.length > 10               || isNaN(dadosProfessor.nif) ||
         dadosProfessor.id_usuario == ''         || dadosProfessor.id_usuario == undefined       || isNaN(dadosProfessor.id_usuario)
     ) {
+
         return message.ERROR_REQUIRED_FIELDS
+        
     } else {
 
         //Envia os dados para a model inserir no banco de dados

@@ -132,7 +132,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 
         dadosAluno.id = idAluno
 
-        let statusId = await alunoDAO.selectLastId(id)
+        let statusId = await alunoDAO.selectAlunoById(idAluno)
 
         if (statusId) {
 
@@ -144,7 +144,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 
                 dadosAlunoJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosAlunoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosAlunoJSON.aluno = resultaDadosProfessor
+                dadosAlunoJSON.aluno = dadosAluno
 
                 return dadosAlunoJSON
 
@@ -163,7 +163,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 //Função que deleta um aluno existente
 const deletarAluno = async function (idAluno) {
 
-    if (idAluno == undefined || idAluno == '' || isNaN(idAluno)) {
+    if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
         return message.ERROR_INVALID_ID
     } else {
 
