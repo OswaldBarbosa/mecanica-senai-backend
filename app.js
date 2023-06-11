@@ -32,8 +32,14 @@ var controllerAluno = require('./controller/controller_aluno.js')
 var controllerUsuario = require('./controller/controller_usuario.js')
 var controllerCurso = require('./controller/controller_curso.js')
 var controllerMateria = require('./controller/controller_materia.js')
+var controllerHorario = require('./controller/controller_horario.js')
+var controllerPeriodo = require('./controller/controller_periodo.js')
+var controllerUsuarioTipo = require('./controller/controller_usuarioTipo.js')
+
 
 var message = require('./controller/modulo/config.js')
+const res = require('express/lib/response.js')
+const req = require('express/lib/request.js')
 
 //Define que os dados que iram chegar na requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
@@ -333,15 +339,19 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 })
 
 /*********************************************CURSOS*********************************************** */
-app.get('/v1/projeto-mecanica-senai/curso', cors(), async function(request, response){
+app.get('/v1/projeto-mecanica-senai/curso', cors(), async function (request, response) {
 
+    let dadosCurso = await controllerCurso.getCursos()
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
 })
 
 app.get('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function (request, response) {
 
     let idCurso = request.params.id
 
-    let dadosCurso = await controllerCurso.getCursosById(id)
+    let dadosCurso = await controllerCurso.getCursosById(idCurso)
 
     response.status(dadosCurso.status)
     response.json(dadosCurso)
@@ -351,16 +361,32 @@ app.get('/v1/projeto-mecanica-senai/curso/nome/:nome', cors(), async function (r
 
     let nomeCurso = request.params.nome
 
-    let dadosCurso = await controllerCurso.getCursosByName
+    let dadosCurso = await controllerCurso.getCursosByName(nomeCurso)
 
     response.status(dadosCurso.status)
     response.json(dadosCurso)
 })
 
-app.post('/v1/projeto-mecanica-senai/curso/', cors(), bodyParserJSON, async function (request, response){
+app.post('/v1/projeto-mecanica-senai/curso', cors(), bodyParserJSON, async function (request, response) {
 
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        //recebe o Id do usuario pelo parametro
+        let dadosBody = request.body
+
+        let dadosCurso = await controllerCurso.inserirCurso(dadosBody)
+
+        response.status(dadosCurso.status)
+        response.json(dadosCurso)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
-
 app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']
@@ -386,20 +412,345 @@ app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async
     }
 })
 
-app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request,response){
+app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function (request, response) {
+    let idCurso = request.params.id
+
+    let dadosCurso = await controllerCurso.deletarCurso(idCurso)
+
+    response.status(dadosCurso.status)
+    response.json(dadosCurso)
+})
+
+//************************************************ENDPOINTS MATERIA *********************************************/
+
+app.get('/v1/projeto-mecanica-senai/materia', cors(), async function (request, response) {
+
+    let dadosMateria = await controllerMateria.getMaterias()
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
 
 })
 
-app.delete('/v1/projeto-mecanica-senai/materia/id/:id', cors(), bodyParserJSON, async function(request, response){
+app.get('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function (request, response) {
 
     let idMateria = request.params.id
 
-    let dadosMateria = controllerMateria.deleteMateria(idMateria)
+    let dadosMateria = await controllerMateria.getMateriaById(idMateria)
 
     response.status(dadosMateria.status)
     response.json(dadosMateria)
 })
+
+app.get('/v1/projeto-mecanica-senai/materia/nome/:nome', cors(), async function (request, response) {
+
+    let nomeMateria = request.params.nome
+
+    let dadosMateria = await controllerMateria.getMateriaByName(nomeMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+app.get('/v1/projeto-mecanica-senai/materia/sigla/:sigla', cors(), async function (request, response) {
+
+    let siglaMateria = request.params.sigla
+
+    let dadosMateria = await controllerMateria.getMateriaBySigla(siglaMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+app.post('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+
+        let resultadoMateria = await controllerMateria.inserirMateria(dadosBody)
+
+        response.status(resultadoMateria.status)
+        response.json(resultadoMateria)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+
+})
+
+app.put('/v1/projeto-mecanica-senai/materia/id/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+        let idMateria = request.params.id
+
+        let resultadoMateria = await controllerMateria.updateMateria(dadosBody, idMateria)
+
+        response.status(resultadoMateria.status)
+        response.json(resultadoMateria)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+
+})
+
+app.delete('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function (request, response) {
+
+    let idMateria = request.params.id
+
+    let dadosMateria = await controllerMateria.deleteMateria(idMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
+
+
+/****************************************END POINT  HORARIO*******************************************/
+
+app.get('/v1/projeto-mecanica-senai/horario', cors(), async function (request, response) {
+
+    let dadosHorario = await controllerHorario.getAllHorarios()
+
+    response.status(dadosHorario.status)
+    response.json(dadosHorario)
+
+})
+
+app.get('/v1/projeto-mecanica-senai/horario/id/:id', cors(), async function (request, response) {
+
+    let idHorario = request.params.id
+
+    let dadosHorario = await controllerHorario.getHorariosById(idHorario)
+
+    response.status(dadosHorario.status)
+    response.json(dadosHorario)
+})
+
+app.post('/v1/projeto-mecanica-senai/horario', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let dadosHorario = await controllerHorario.insertHorario(dadosBody)
+
+        response.status(dadosHorario.status)
+        response.json(dadosHorario)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+})
+
+app.put('/v1/projeto-mecanica-senai/horario/id/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let idHoraio = request.params.id
+
+        let dadosHorario = await controllerHorario.updateHorario(dadosBody, idHoraio)
+
+        response.status(dadosHorario.status)
+        response.json(dadosHorario)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.delete('/v1/projeto-mecanica-senai/horario/id/:id', cors(), async function (request, response) {
+
+    let idHoraio = request.params.id
+
+    let dadosHorario = await controllerHorario.deleteHorario(idHoraio)
+
+    response.status(dadosHorario.status)
+    response.json(dadosHorario)
+})
+
+//********************************************************PERIODOS ****************************************************************/
+
+app.get('/v1/projeto-mecanica-senai/periodo', cors(), async function (request, response) {
+
+    let dadosPeriodo = await controllerPeriodo.getAllPeriodos()
+
+    response.status(dadosPeriodo.status)
+    response.json(dadosPeriodo)
+})
+
+app.get('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (request, response) {
+
+    let idPeriodo = request.params.id
+
+    let dadosPeriodo = await controllerPeriodo.getPeriodoById(idPeriodo)
+
+    response.status(dadosPeriodo.status)
+    response.json(dadosPeriodo)
+})
+
+app.get('/v1/projeto-mecanica-senai/periodo/nome/:nome', cors(), async function (request, response) {
+
+    let nomePeriodo = request.params.nome
+
+    let dadosPeriodo = await controllerPeriodo.getPeriodoByName(nomePeriodo)
+
+    response.status(dadosPeriodo.status)
+    response.json(dadosPeriodo)
+})
+
+app.post('/v1/projeto-mecanica-senai/periodo', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+
+        let dadosPeriodo = await controllerPeriodo.insertPeriodo(dadosBody)
+
+        response.status(dadosPeriodo.status)
+        response.json(dadosPeriodo)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.put('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+
+        let idPeriodo = request.params.id
+
+        let dadosPeriodo = await controllerPeriodo.updatePeriodo(dadosBody, idPeriodo)
+
+        response.status(dadosPeriodo.status)
+        response.json(dadosPeriodo)
+
+    } else {
+
+        response.status(message.SUCCESS_UPDATE_ITEM.status)
+        response.message(message.SUCCESS_UPDATE_ITEM.message)
+
+    }
+
+})
+
+app.delete('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (request, response) {
+
+    let idPeriodo = request.params.id
+
+    let dadosPeriodo = await controllerPeriodo.deletePeriodo(idPeriodo)
+
+    response.status(dadosPeriodo.status)
+    response.message(dadosPeriodo)
+})
+
+//*******************************************************END POINTS USUARIO TIPO **********************************************/
+
+app.get('/v1/projeto-mecanica-senai/usuario-tipo', cors(), async function (request, response) {
+
+    let dadosUsuarioTipo = await controllerUsuarioTipo.getAllUsuarioTipo()
+
+    response.status(dadosUsuarioTipo.status)
+    response.json(dadosUsuarioTipo)
+})
+
+app.get('/v1/projeto-mecanica-senai/usuario-tipo/id/:id', cors(), async function (request, response) {
+
+    let idUsuarioTipo = request.params.id
+
+    let dadosUsuarioTipo = await controllerUsuarioTipo.getUsuarioTipoById(idUsuarioTipo)
+
+    response.status(dadosUsuarioTipo.status)
+    response.json(dadosUsuarioTipo)
+})
+
+app.get('/v1/projeto-mecanica-senai/usuario-tipo/nome/:nome', cors(), async function (request, response) {
+
+    let nomeUsuarioTipo = request.params.nome
+
+    let dadosUsuarioTipo = await controllerUsuarioTipo.getUsuarioTipoByName(nomeUsuarioTipo)
+
+    response.status(dadosUsuarioTipo.status)
+    response.json(dadosUsuarioTipo)
+})
+
+app.post('/v1/projeto-mecanica-senai/periodo', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+
+        let dadosUsuarioTipo = await controllerUsuarioTipo.insertUsuarioTipo(dadosBody)
+
+        response.status(dadosUsuarioTipo.status)
+        response.json(dadosUsuarioTipo)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.put('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let idUsuarioTipo = request.params.id
+
+        let dadosBody = request.body
+
+        let dadosUsuarioTipo = await controllerUsuarioTipo.updateUsuarioTipo(dadosBody, idUsuarioTipo)
+
+        response.status(dadosUsuarioTipo.status)
+        response.json(dadosUsuarioTipo)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+
+    }
+})
+
+app.delete('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (request, response){
+
+    let idUsuarioTipo = request.params.id
+
+    let dadosUsuarioTipo = await controllerUsuarioTipo.deleteUsuarioTipo(idUsuarioTipo)
+
+    response.status(dadosUsuarioTipo.status)
+    response.json(dadosUsuarioTipo)
+    
+})
 /********************************************************* ENDPOPINTS **********************************************************/
+
+
 
 app.listen(8080, function () {
     console.log('Servidor aguardando requisições na porta 8080')

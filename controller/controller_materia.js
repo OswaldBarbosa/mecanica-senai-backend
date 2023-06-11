@@ -52,12 +52,13 @@ const getMateriaById = async function (idMateria) {
 
 const getMateriaByName = async function (nomeMateria) {
 
-    if (nomeMateria == undefined || nomeMateria == '' || isNaN(nomeMateria) || nomeMateria.length > 45) {
+    if (nomeMateria == undefined || nomeMateria == '' || !isNaN(nomeMateria) || nomeMateria.length > 45) {
         return message.ERROR_INVALID_NAME
     } else {
         let dadosMateriaJSON = {}
 
         let dadosMateria = await materiaDAO.selectMateriaByName(nomeMateria)
+        
 
         if (dadosMateria) {
             dadosMateriaJSON.status = message.SUCCESS_REQUEST.status
@@ -69,7 +70,6 @@ const getMateriaByName = async function (nomeMateria) {
             return message.ERROR_NOT_FOUND
         }
     }
-
 }
 
 //Função que retorna a materia pela sigla
@@ -97,7 +97,7 @@ const getMateriaBySigla = async function (siglaMateria) {
 
 
 //Função que insere uma nova matéria
-const inserirMatricula = async function (dadosMateria, idMateria) {
+const inserirMateria = async function (dadosMateria) {
 
     if (dadosMateria.nome == '' || dadosMateria.nome == undefined || dadosMateria.nome.length > 45 || !isNaN(dadosMateria.nome) ||
         dadosMateria.sigla == '' || dadosMateria.sigla == undefined || dadosMateria.sigla.length > 20 || !isNaN(dadosMateria.sigla) ||
@@ -106,17 +106,16 @@ const inserirMatricula = async function (dadosMateria, idMateria) {
 
         return message.ERROR_REQUIRED_FIELDS
 
-    } else if (idMateria == '' || idMateria == undefined || isNaN(idMateria)) {
+    }else {
+        
+        let materiaNova = await materiaDAO.insertMateria(dadosMateria)
+        
 
-        return message.ERROR_INVALID_ID
+        if (materiaNova) {
 
-    } else {
-        let dadosMateriaJSON = {}
+            let materiaCriada = await materiaDAO.selectLastId()
+            let dadosMateriaJSON = {}
 
-        let dadosMateria = await materiaDAO.insertMateria(dadosMateria)
-        let materiaCriada = await materiaDAO.selectLastId(idMateria)
-
-        if (dadosMateria) {
             dadosMateriaJSON.status = message.SUCCESS_CREATE_ITEM.status
             dadosMateriaJSON.message = message.SUCCESS_CREATE_ITEM.message
             dadosMateriaJSON.materiaCriada = materiaCriada
@@ -143,7 +142,7 @@ const updateMateria = async function (dadosMateria, idMateria) {
     }else{
         let dadosMateriaJSON = {}
 
-        let dadosMateria = await materiaDAO.updateMateria(dadosMateriaJSON)
+        let atualizarMateria = await materiaDAO.updateMateria(dadosMateria, idMateria)
         let materiaAtualizada = await materiaDAO.selectMateriaById(idMateria)
 
         if(dadosMateria){
@@ -159,23 +158,25 @@ const updateMateria = async function (dadosMateria, idMateria) {
 }
 
 //Função que deleta o aluno
-const deleteMateria = async function(id){
+const deleteMateria = async function(idMateria){
     if(idMateria == '' || idMateria == undefined || isNaN(idMateria)){
         return message.ERROR_INVALID_ID
     }else{
-        dadosMateriaJSON = {}
 
-        materiaDeletada = await materiaDAO.selectMateriaById(id)
-        dadosMateria = await materiaDAO.deleteMateria(id)
+       
+
+        materiaDeletada = await materiaDAO.selectMateriaById(idMateria)
+        dadosMateria = await materiaDAO.deleteMateria(idMateria)
         
         if(dadosMateria){
+
+            dadosMateriaJSON = {} 
+            
             dadosMateriaJSON.status = message.SUCCESS_DELETE_ITEM.status
             dadosMateriaJSON.message= message.SUCCESS_DELETE_ITEM.message
             dadosMateriaJSON.materiaDeletada = materiaDeletada
 
             return dadosMateriaJSON
-        }else{
-            return message.ERROR_NOT_FOUND
         }
         
     }
@@ -186,7 +187,7 @@ module.exports = {
     getMateriaByName,
     getMateriaBySigla,
     getMaterias,
-    inserirMatricula,
+    inserirMateria,
     updateMateria,
     deleteMateria
 }

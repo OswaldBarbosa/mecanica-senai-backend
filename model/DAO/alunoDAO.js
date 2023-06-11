@@ -16,7 +16,7 @@ const selectAllAlunos = async function () {
 
     let sql = `select * from tbl_aluno`
 
-    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoAluno.length > 0) {
         return resultadoAluno
@@ -31,7 +31,7 @@ const selectAlunoById = async function (idAluno) {
 
     let sql = `select * from tbl_aluno where id = ${idAluno}`
 
-    let resultadoAluno = await prisma.$executeRawUnsafe(sql)
+    let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoAluno.length > 0) {
         return resultadoAluno
@@ -100,7 +100,7 @@ const insertAluno = async function (dadosAluno) {
         '${dadosAluno.data_nascimento}'
         );`
 
-    console.log(sql);
+    
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
@@ -124,7 +124,7 @@ const updateAluno = async function (dadosAluno) {
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
-    console.log(resultadoAluno);
+    
 
     if (resultadoAluno) {
         return true
@@ -137,9 +137,8 @@ const updateAluno = async function (dadosAluno) {
 //Deleta o professor do banco de dados
 const deleteAluno = async function (idAluno) {
 
-    let sql = `delete from tbl_aluno where id = '${idAluno}'`
+    let sql = `delete from tbl_aluno where id = ${idAluno}`
 
-    let sql = `delete from tbl_aluno where id = '${id}'`
 
     let resultadoAluno = prisma.$executeRawUnsafe(sql)
 
