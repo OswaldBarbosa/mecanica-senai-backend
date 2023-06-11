@@ -41,7 +41,7 @@ const selectTarefaById = async function (idTarefa) {
 
 const selectTarefaByNumero = async function (numeroTarefa) {
 
-    let sql = `select * from tbl_tarefa numero = ${numeroTarefa}`
+    let sql = `select * from tbl_tarefa where numero = ${numeroTarefa}`
 
     let resultadoTarefa = await prisma.$queryRawUnsafe(sql)
 
@@ -61,7 +61,7 @@ const selectTarefaByNome = async function (nomeTarefa) {
 
     if (resultadoTarefa.length > 0) {
         return resultadoTarefa
-    } else {
+    } else {    
         return false
     }
 
@@ -73,14 +73,14 @@ const insertTarefa = async function (dadosTarefa) {
 		nome,
         numero,
         tempo_previsto,
-        id_horario,
+        id_horario
         ) values (
         '${dadosTarefa.nome}',
         '${dadosTarefa.numero}',
         '${dadosTarefa.tempo_previsto}',
         '${dadosTarefa.id_horario}'
-        );`
-
+        )`
+7
     let resultadoTarefa = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoTarefa) {
@@ -98,7 +98,9 @@ const updateTarefa = async function (dadosTarefa) {
                numero = '${dadosTarefa.numero}',
                tempo_previsto = '${dadosTarefa.tempo_previsto}',
                id_horario = '${dadosTarefa.id_horario}'
-               where id = '${dadosTarefa.id}`
+               where id = '${dadosTarefa.id}'`
+
+    console.log(sql);
  
     let resultadoTarefa = await prisma.$executeRawUnsafe(sql)
 
@@ -110,9 +112,9 @@ const updateTarefa = async function (dadosTarefa) {
 
 }
 
-const deleteTarefa = async function (dadosTarefa) {
+const deleteTarefa = async function (idTarefa) {
 
-    let sql = `delete tbl_tarefa where id = ${dadosTarefa}`
+    let sql = `delete from tbl_tarefa where id = ${idTarefa}`
 
     let resultadoTarefa = await prisma.$queryRawUnsafe(sql)
 
@@ -126,7 +128,7 @@ const deleteTarefa = async function (dadosTarefa) {
 
 const selectLastId = async function () {
 
-    let sql = `select * tbl_tarefa order by id desc limit 1`
+    let sql = `select * from tbl_tarefa order by id desc limit 1 ;`
 
     let resultadoTarefa = await prisma.$queryRawUnsafe(sql)
 

@@ -92,10 +92,10 @@ const getTarefaByNome = async function (nomeTarefa) {
 
 const inserirTarefa = async function (dadosTarefa) {
 
-    if (dadosTarefa.nome == ''                   || dadosTarefa.nome == undefined                 || !isNaN(dadosTarefa.nome)   || dadosTarefa.length > 150 ||
+    if (dadosTarefa.nome == ''                   || dadosTarefa.nome == undefined                 || !isNaN(dadosTarefa.nome)   || dadosTarefa.nome.length > 150 ||
         dadosTarefa.numero == ''                 || dadosTarefa.numero == undefined               || isNaN(dadosTarefa.numero)  || 
         dadosTarefa.tempo_previsto == ''         || dadosTarefa.tempo_previsto == undefined       ||
-        dadosTarefa.id_horario == ''             || dadosTarefa.id_horario == undefined           || isNaN(dadosTarefa.id_curso)            
+        dadosTarefa.id_horario == ''             || dadosTarefa.id_horario == undefined           || isNaN(dadosTarefa.id_horario)            
     ) {
         return message.ERROR_REQUIRED_FIELDS
     } else {
@@ -104,7 +104,7 @@ const inserirTarefa = async function (dadosTarefa) {
 
         if (resultadoDadosTarefa) {
 
-            let novaTarefa = await turmaDAO.selectLastId()
+            let novaTarefa = await tarefaDAO.selectLastId()
 
             let dadosTarefaJSON = {}
 
@@ -127,7 +127,7 @@ const atualizarTarefa = async function (dadosTarefa, idTarefa) {
     if (dadosTarefa.nome == ''                   || dadosTarefa.nome == undefined                 || !isNaN(dadosTarefa.nome)   || dadosTarefa.length > 150 ||
         dadosTarefa.numero == ''                 || dadosTarefa.numero == undefined               || isNaN(dadosTarefa.numero)  || 
         dadosTarefa.tempo_previsto == ''         || dadosTarefa.tempo_previsto == undefined       ||
-        dadosTarefa.id_horario == ''             || dadosTarefa.id_horario == undefined           || isNaN(dadosTarefa.id_curso)  
+        dadosTarefa.id_horario == ''             || dadosTarefa.id_horario == undefined           || isNaN(dadosTarefa.id_horario)  
     ) {
 
         return message.ERROR_REQUIRED_FIELDS

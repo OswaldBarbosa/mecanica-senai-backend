@@ -138,7 +138,7 @@ const deleteProfessor = async function (idProfessor) {
 const selectLastId = async function () {
 
     //script para pegar o ultimo ID inserido na tabela de alunos
-    let sql = `select * from tbl_professor order by id desc limit 1 ;`
+    let sql = `select * from tbl_professor order by id desc limit 1`
 
     //executa o script sql no banco de dados
     let resultStatus = await prisma.$queryRawUnsafe(sql)

@@ -14,15 +14,11 @@ var prisma = new PrismaClient()
 //seleciona todas as materias
 const selectAllMaterias = async function () {
 
-    let sql = `select tbl_materia.nome,
-                         tbl_materia.sigla,
-                         tbl_materia.carga_horaria,
-                         tbl_materia.descricao
-                            from tbl_materia`
+    let sql = `select * from tbl_materia`
 
     let resultadoMateria = await prisma.$queryRawUnsafe(sql)
 
-    if (resultadoMateria)
+    if (resultadoMateria.length > 0)
         return resultadoMateria
     else
         return false
@@ -42,7 +38,7 @@ const selectMateriaById = async function (id) {
     
     let resultadoMateria = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoMateria)
+    if(resultadoMateria.length > 0)
         return resultadoMateria
     else
         return false
@@ -51,17 +47,12 @@ const selectMateriaById = async function (id) {
 //Seleciona uma materia pelo nome
 const selectMateriaByName = async function (nomeMateria) {
 
-    let sql = `select tbl_materia.nome,
-                    tbl_materia.sigla,
-                    tbl_materia.carga_horaria,
-                    tbl_materia.descricao
-    
-                    from tbl_materia 
-                        where nome like '%${nomeMateria}%'`
+    let sql = `select * from tbl_materia where nome like '%${nomeMateria}%'`
 
     let resultadoMateria = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoMateria)
+
+    if(resultadoMateria.length > 0)
         return resultadoMateria
     else
         return false
@@ -80,7 +71,7 @@ const selectMateriaBySigla = async function (siglaMateria){
 
     let resultadoMateria = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoMateria)
+    if(resultadoMateria.length > 0) 
         return resultadoMateria
     else
         return false
@@ -105,14 +96,14 @@ const insertMateria = async function(dadosMateria){
     let resultadoMateria = await prisma.$executeRawUnsafe(sql)
 
     if(resultadoMateria)
-        return resultadoMateria
+        return true
     else   
         return false
 
 }
 
 //Atualizar Materia
-const updateMateria = async function(dadosMateria){
+const updateMateria = async function(dadosMateria, idMateria){
 
     let sql = `update tbl_materia set
                     nome = '${dadosMateria.nome}',
@@ -120,12 +111,12 @@ const updateMateria = async function(dadosMateria){
                     carga_horaria = '${dadosMateria.carga_horaria}',
                     descricao = '${dadosMateria.descricao}'
                     
-                        where id = ${dadosMateria.id}`
+                        where id = ${idMateria}`
 
     let resultadoMateria = await prisma.$executeRawUnsafe(sql)
 
     if(resultadoMateria)
-        return resultadoMateria
+        return true
     else
         return false
 } 
@@ -144,15 +135,18 @@ const deleteMateria = async function (idMateria){
 }
 
 const selectLastId = async function(){
-    let sql = `select * from tbl_professor order by id desc limit 1 `
+    let sql = `select * from tbl_materia order by id desc limit 1 `
 
     let resultadoMateria = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoMateria)
+    if(resultadoMateria.length > 0)
         return resultadoMateria
     else
-        return resultadoMateria
+        return false
 }
+
+selectMateriaByName()
+
 
 module.exports = {
     selectAllMaterias,
