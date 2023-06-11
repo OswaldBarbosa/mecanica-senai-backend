@@ -56,7 +56,7 @@ const getCursosById = async function (id) {
 }
 
 const getCursosByName = async function (nomeCurso) {
-    
+
 
     if (nomeCurso == '' || nomeCurso == undefined || !isNaN(nomeCurso)) {
 
@@ -77,7 +77,7 @@ const getCursosByName = async function (nomeCurso) {
 
             return dadosCursoJSON
 
-        }else{
+        } else {
             return message.ERROR_NOT_FOUND
         }
     }
@@ -123,37 +123,37 @@ const updateCurso = async function (dadosCurso, idCurso) {
         dadosCurso.descricao == '' || dadosCurso.descricao == undefined || !isNaN(dadosCurso.descricao)) {
 
         return message.ERROR_INVALID_NAME
+    } else if (idCurso == '' || idCurso == undefined || isNaN(idCurso)) {
+
+        return message.ERROR_INVALID_ID
+
     } else {
 
-        if (id == '' || id == undefined || !isNaN(id)) {
-            return message.ERROR_INVALID_ID
+        dadosCurso.id = idCurso
+        let resultadoCurso = await cursoDAO.updateCurso(dadosCurso)
+
+        if (resultadoCurso) {
+
+            let cursoAtualizado = await cursoDAO.selectCursoById(idCurso)
+
+            dadosCursoJSON.status = message.SUCCESS_UPDATE_ITEM.status
+            dadosCursoJSON.message = message.SUCCESS_UPDATE_ITEM.message
+            dadosCursoJSON.cursoAtualizado = cursoAtualizado
+
+            return dadosCursoJSON
         } else {
-
-
-            let resultadoCurso = await cursoDAO.updateCurso(dadosCurso)
-
-            if (resultadoCurso) {
-
-                let cursoAtualizado = await cursoDAO.selectCursoById(idCurso)
-
-                dadosCursoJSON.status = message.SUCCESS_UPDATE_ITEM.status
-                dadosCursoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosCursoJSON.cursoAtualizado = cursoAtualizado
-
-                return dadosCursoJSON
-            } else {
-                return message.ERROR_INTERNAL_SERVER
-            }
+            return message.ERROR_INTERNAL_SERVER
         }
     }
 }
+
 
 const deletarCurso = async function (id) {
 
     if (id == '' || id == undefined || isNaN(id)) {
         return message.ERROR_INVALID_ID
     } else {
-        
+
         let cursoDeletado = await cursoDAO.selectCursoById(id)
         let resultadoCurso = await cursoDAO.deleteCurso(id)
 

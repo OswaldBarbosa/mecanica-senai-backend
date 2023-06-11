@@ -35,6 +35,8 @@ var controllerMateria = require('./controller/controller_materia.js')
 var controllerHorario = require('./controller/controller_horario.js')
 var controllerPeriodo = require('./controller/controller_periodo.js')
 var controllerUsuarioTipo = require('./controller/controller_usuarioTipo.js')
+var controllerCriterioTipo = require('./controller/controller_criterioTipo.js')
+var controllerAvaliacao = require('./controller/controller_avaliacao.js')
 
 
 var message = require('./controller/modulo/config.js')
@@ -747,6 +749,155 @@ app.delete('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (
     response.status(dadosUsuarioTipo.status)
     response.json(dadosUsuarioTipo)
     
+})
+
+/**************************************************END POINTS CRITERIO_TIPO *************************************************/
+
+app.get('/v1/projeto-mecanica-senai/criterio-tipo', cors(), async function (request, response){
+
+    let dadosCriterioTipo = await controllerCriterioTipo.getAllCriterioTipo()
+
+    response.status(dadosCriterioTipo.status)
+    response.json(dadosCriterioTipo)
+
+})
+
+app.get('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async function (request, response){
+
+    let idCriterioTipo = request.params.id
+
+    let dadosCriterioTipo = await controllerCriterioTipo.getCriterioTipoById(idCriterioTipo)
+
+    response.status(dadosCriterioTipo.status)
+    reportError.json(dadosCriterioTipo)
+})
+
+app.get('/v1/projeto-mecanica-senai/criterio-tipo/nome/:nome', cors(), async function (request, response){
+
+    let nomeCriterioTipo = request.params.nome
+
+    let dadosCriterioTipo = await controllerCriterioTipo.getCriterioTipoByName(nomeCriterioTipo)
+
+    response.status(dadosCriterioTipo.status)
+    response.json(dadosCriterioTipo)
+})
+
+app.post('/v1/projeto-mecanica-senai/criterio-tipo', cors(), bodyParserJSON, async function (request, response){
+    
+    let contentType = request.headers['content-type']
+
+    if(String(contentType).toLowerCase == 'application/json'){
+
+        let dadosBody = request.body
+
+        let dadosCriterioTipo = await controllerCriterioTipo.insertCriterioTipo(dadosBody)
+
+        response.status(dadosCriterioTipo.status)
+        response.json(dadosCriterioTipo)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+})
+
+app.put('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), bodyParserJSON, async function (request, response){
+
+    let contentType = request.headers['content-type']
+
+    if(String(contentType).toLowerCase == 'application/json'){
+
+        let dadosBody = request.body
+        let idCriterioTipo = request.params.id
+
+        let dadosCriterioTipo = await controllerCriterioTipo.updateCriterioTipo(dadosBody, idCriterioTipo)
+
+        response.status(dadosCriterioTipo.status)
+        response.message(dadosCriterioTipo)
+    }else{
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+        
+    }
+})
+
+app.delete('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async function (request, response){
+
+    let idCriterioTipo = request.params.id
+
+    let dadosCriterioTipo = await controllerCriterioTipo.deleteCriterioTipo(idCriterioTipo)
+
+    response.status(dadosCriterioTipo.status)
+    response.json(dadosCriterioTipo)
+})
+
+/********************************************END POINT AVALIAÇÃO **************************************************************/
+
+app.get('/v1/projeto-mecanica-senai/avaliacao', cors(), async function(request, response){
+
+    let dadosAvaliacao = await controllerAvaliacao.getAllAvaliacao()
+
+    response.status(dadosAvaliacao.status)
+    response.json(dadosAvaliacao)
+})
+
+app.get('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async function(request,response){
+
+    let idAvaliacao = request.params.id
+
+    let dadosAvaliacao = await controllerAvaliacao.getAvaliacaoById(idAvaliacao)
+
+    response.status(dadosAvaliacao.status)
+    response.json(dadosAvaliacao)
+})
+
+app.post('/v1/projeto-mecanica-senai/criterio-tipo', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    if(String(contentType).toLowerCase == 'application/json'){
+
+        let dadosBody = request.body
+
+        let dadosAvaliacao = await controllerAvaliacao.insertAvaliacao(dadosBody)
+
+        response.status(dadosAvaliacao.status)
+        response.json(dadosAvaliacao)
+    }else{
+
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.put('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    if(String(contentType).toLowerCase == 'application/json'){
+        
+        let dadosBody = request.body
+        let idAvaliacao = request.params.id
+
+        let dadosAvaliacao = await controllerAvaliacao.updateAvaliacao(dadosBody, idAvaliacao)
+
+        response.status(dadosAvaliacao.status)
+        response.json(dadosAvaliacao)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.delete('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async function(request, response){
+
+    let idAvaliacao = request.params.id
+
+    let dadosAvaliacao = await controllerAvaliacao.deleteAvaliacao(idAvaliacao)
+
+    response.status(dadosAvaliacao.status)
+    response.json(dadosAvaliacao)
 })
 /********************************************************* ENDPOPINTS **********************************************************/
 

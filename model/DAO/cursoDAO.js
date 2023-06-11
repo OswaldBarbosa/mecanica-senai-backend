@@ -94,9 +94,9 @@ const updateCurso = async function(dadosCurso){
     let sql = `update tbl_curso set 
                     nome = '${dadosCurso.nome}',
                     sigla = '${dadosCurso.sigla}',
-                    carga_horario = '${dadosCurso.sigla}',
+                    carga_horaria = '${dadosCurso.carga_horaria}',
                     descricao = '${dadosCurso.descricao}'
-                    where id = '${dadosCurso.id}'`
+                    where id = ${dadosCurso.id}`
     
     let resultadoCurso = await prisma.$executeRawUnsafe(sql)
 
