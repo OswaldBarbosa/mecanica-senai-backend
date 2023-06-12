@@ -572,6 +572,7 @@ app.get('/v1/projeto-mecanica-senai/materia/sigla/:sigla', cors(), async functio
 })
 
 app.post('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async function (request, response) {
+
     let contentType = request.headers['content-type']
 
     //Validação para receber dados apenas no formato JSON
@@ -580,10 +581,10 @@ app.post('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async fun
 
         let dadosBody = request.body
 
-        let dadosMatricula = await controllerMatricula.inserirMatricula(dadosBody)
+        let dadosMateria = await controllerMateria.inserirMateria(dadosBody)
 
-        response.status(dadosMatricula.status)
-        response.json(dadosMatricula)
+        response.status(dadosMateria.status)
+        response.json(dadosMateria)
 
     } else {
 

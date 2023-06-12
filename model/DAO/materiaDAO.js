@@ -82,7 +82,7 @@ const selectMateriaBySigla = async function (siglaMateria){
 const insertMateria = async function(dadosMateria){
 
     let sql = `insert into tbl_materia (
-                                        nome,
+        nome,
                                         sigla,
                                         carga_horaria,
                                         descricao
