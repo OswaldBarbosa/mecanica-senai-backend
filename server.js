@@ -49,8 +49,6 @@ var controllerAvaliacao = require('./controller/controller_avaliacao.js')
 
 var controllerMatricula = require('./controller/controller_matricula.js')
 
-var controllerPeriodo = require('./controller/controler_periodo.js')
-
 var controllerTurma = require('./controller/controller_turma.js')
 
 var controllerTarefa = require('./controller/controller_tarefa.js')
@@ -62,7 +60,7 @@ const bodyParserJSON = bodyParser.json()
 
 /********************************************************* ENDPOINTS **********************************************************/
 
-/********************************************************* ENDPOINTS - ALUNOS **********************************************************/
+/********************************************************* ENDPOINTS - ALUNOS - OK **********************************************************/
 
 //endpoint: retorna todos os alunos registrados no banco
 app.get('/v1/projeto-mecanica-senai/aluno/', cors(), async function (request, response) {
@@ -269,7 +267,7 @@ app.delete('/v1/projeto-mecanica-senai/professor/id/:id', cors(), async function
 
 })
 
-/********************************************************* ENDPOINTS - USUARIOS **********************************************************/
+/********************************************************* ENDPOINTS - USUARIOS - OK **********************************************************/
 
 app.get('/v1/projeto-mecanica-senai/usuario', cors(), async function (request, response) {
 
@@ -354,7 +352,7 @@ app.delete('/v1/projeto-mecanica-senai/usuario/id/:id', cors(), async function (
 
 })
 
-/********************************************************* ENDPOINTS - MATRICULA **********************************************************/
+/********************************************************* ENDPOINTS - MATRICULA - OK **********************************************************/
 
 app.get('/v1/projeto-mecanica-senai/matricula/', cors(), async function (request, response) {
 
@@ -447,7 +445,7 @@ app.delete('/v1/projeto-mecanica-senai/matricula/id/:id', cors(), async function
 
 })
 
-//******************************************************** ENDPOINTS - PERIODO ****************************************************************/
+//******************************************************** ENDPOINTS - PERIODO - OK ****************************************************************/
 
 app.get('/v1/projeto-mecanica-senai/periodo/', cors(), async function (request, response) {
 
@@ -506,7 +504,7 @@ app.put('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), bodyParserJSON, asy
 
         let idPeriodo = request.params.id
 
-        let dadosPeriodo = await controllerPeriodo.updatePeriodo(dadosBody, idPeriodo)
+        let dadosPeriodo = await controllerPeriodo.atualizarPeriodo(dadosBody, idPeriodo)
 
         response.status(dadosPeriodo.status)
         response.json(dadosPeriodo)
@@ -524,13 +522,13 @@ app.delete('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (
 
     let idPeriodo = request.params.id
 
-    let dadosPeriodo = await controllerPeriodo.deletePeriodo(idPeriodo)
+    let dadosPeriodo = await controllerPeriodo.deletarPeriodo(idPeriodo)
 
     response.status(dadosPeriodo.status)
-    response.message(dadosPeriodo)
+    response.json(dadosPeriodo)
 })
 
-//******************************************************** ENDPOINTS - MATERIA ****************************************************************/
+//******************************************************** ENDPOINTS - MATERIA - OK ****************************************************************/
 
 app.get('/v1/projeto-mecanica-senai/materia', cors(), async function (request, response) {
 
@@ -629,7 +627,7 @@ app.delete('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function (
     response.json(dadosMateria)
 })
 
-/********************************************* ENDPOINTS - CURSOS *********************************************** */
+/********************************************* ENDPOINTS - CURSOS - OK *********************************************** */
 
 app.get('/v1/projeto-mecanica-senai/curso', cors(), async function (request, response) {
 
@@ -714,6 +712,91 @@ app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function (re
     response.status(dadosCurso.status)
     response.json(dadosCurso)
     
+})
+
+/********************************************************* ENDPOPINT - TAREFA **********************************************************/
+
+app.get('/v1/projeto-mecanica-senai/tarefa', cors(), async function (request, response) {
+
+    let dadosTarefa = await controllerTarefa.getTarefas()
+
+    response.status(dadosTarefa.status)
+    response.json(dadosTarefa)
+})
+
+app.get('/v1/projeto-mecanica-senai/tarefa/id/:id', cors(), async function (request, response) {
+
+    let idTarefa = request.params.id
+
+    let dadosTarefa = await controllerTarefa.getTarefaById(idTarefa)
+
+    response.status(dadosTarefa.status)
+    response.json(dadosTarefa)
+
+})
+
+app.get('/v1/projeto-mecanica-senai/tarefa/numero/:numero', cors(), async function (request, response) {
+
+    let numeroTarefa = request.params.numero
+
+    let dadosTarefa = await controllerTarefa.getTarefaByNumero(numeroTarefa)
+
+    response.status(dadosTarefa.status)
+    response.json(dadosTarefa)
+    
+})
+
+app.get('/v1/projeto-mecanica-senai/tarefa/nome/:nome', cors(), async function (request, response) {
+
+    let nomeTarefa = request.params.nome
+
+    let dadosTarefa = await controllerTarefa.getTarefaByNome(nomeTarefa)
+
+    response.status(dadosTarefa.status)
+    response.json(dadosTarefa)
+    
+})
+
+app.post('/v1/projeto-mecanica-senai/tarefa', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let dadosBody = request.body
+
+        let dadosTarefa = await controllerTarefa.inserirTarefa(dadosBody)
+
+        response.status(dadosTarefa.status)
+        response.json(dadosTarefa)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.put('/v1/projeto-mecanica-senai/tarefa/id/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    //Validação para receber dados apenas no formato JSON
+    if (String(contentType).toLowerCase() == 'application/json') {
+
+        let idTarefa = request.params.id
+
+        let dadosBody = request.body
+
+        let dadosTarefa = await controllerTarefa.atualizarTarefa(dadosBody, idTarefa)
+
+        response.status(dadosTarefa.status)
+        response.json(dadosTarefa)
+
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
 })
 
 /********************************************************* ENDPOINTS - HORARIO **********************************************************/
@@ -1014,6 +1097,7 @@ app.delete('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async func
     response.status(dadosAvaliacao.status)
     response.json(dadosAvaliacao)
 })
+
 /********************************************************* ENDPOPINTS **********************************************************/
 
 app.listen(8080, function () {

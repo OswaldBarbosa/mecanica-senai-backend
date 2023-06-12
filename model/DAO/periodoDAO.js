@@ -76,8 +76,7 @@ const insertPeriodo = async function (dadosPeriodo) {
 const updatePeriodo = async function (dadosPeriodo) {
 
     let sql = `update tbl_periodo set 
-                        nome = '${dadosPeriodo.dadosPeriodo}'
-                        
+                        nome = '${dadosPeriodo.nome}'
                         where id = ${dadosPeriodo.id}`
 
     let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
