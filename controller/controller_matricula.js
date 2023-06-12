@@ -166,7 +166,7 @@ const deletarMatricula = async function (idMatricula) {
 
     } else {
 
-        let statusId = await matriculaDAO.selectLastId(idMatricula)
+        let statusId = await matriculaDAO.selectMatriculaById(idMatricula)
 
         if (statusId) {
 

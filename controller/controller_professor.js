@@ -7,7 +7,7 @@
 
 var professorDAO = require('../model/DAO/professorDAO.js')
 
-var message = require('../controller/modulo/config.js')
+var message = require('./modulo/config.js')
 
 //Função que retorna a lista de todos os professores existentes dentro de nosso banco de dados
 const getProfessores = async function () {
@@ -177,14 +177,16 @@ const deletarProfessor = async function (idProfessor) {
 
     } else {
 
-        let statusId = await professorDAO.selectLastId(idProfessor)
+        let statusId = await professorDAO.selectProfessoreById(idProfessor)
 
         if (statusId) {
 
             let resultadoDadosProfessor = await professorDAO.deleteProfessor(idProfessor)
 
             if (resultadoDadosProfessor) {
+
                 return message.SUCCESS_DELETE_ITEM
+                
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }

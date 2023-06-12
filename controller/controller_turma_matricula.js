@@ -54,17 +54,17 @@ const getTurmaMatriculaById = async function (idTurmamatricula) {
 
 }
 
-const insertTurmaMatricula = async function (dadosTurmaMatricula) {
+const inserirTurmaMatricula = async function (dadosTurmaMatricula) {
 
     if (dadosTurmaMatricula.id_turma == '' || dadosTurmaMatricula.id_turma == undefined || isNaN(dadosTurmaMatricula.id_turma) ||
         dadosTurmaMatricula.id_matricula == '' || dadosTurmaMatricula.id_matricula == undefined || isNaN(dadosTurmaMatricula.id_matricula)
     ) {
-        return message.ERROR_INVALID_ID
+        return message.ERROR_REQUIRED_FIELDS
     } else {
 
-        let resultadoTurmaMatricula = await turmaMatriculaDAO.insertTurmaMatricula()
+        let resultadoDadosTurmaMatricula = await turmaMatriculaDAO.insertTurmaMatricula()
 
-        if (resultadoTurmaMatricula) {
+        if (resultadoDadosTurmaMatricula) {
 
             let dadosTurmaMatriculaJSON = {}
 
@@ -81,19 +81,83 @@ const insertTurmaMatricula = async function (dadosTurmaMatricula) {
     }
 }
 
-const updateTurmaMatricula = async function (dadosTurmaMatricula,idTurmamatricula) {
+const atualizarTurmaMatricula = async function (dadosTurmaMatricula, idTurmaMatricula) {
 
     if (dadosTurmaMatricula.id_turma == '' || dadosTurmaMatricula.id_turma == undefined || isNaN(dadosTurmaMatricula.id_turma) ||
         dadosTurmaMatricula.id_matricula == '' || dadosTurmaMatricula.id_matricula == undefined || isNaN(dadosTurmaMatricula.id_matricula)
     ) {
+
+        return message.ERROR_REQUIRED_FIELDS
+
+    } else if (idTurmaMatricula == '' || idTurmaMatricula == undefined || isNaN(idTurmaMatricula)) {
+
         return message.ERROR_INVALID_ID
-    } else if (idTurmamatricula == '' ) {
+
+    } else {
+
+        dadosTurmaMatricula.id = idTurmaMatricula
+
+        let statusId = await turmaMatriculaDAO.selectTurmaMatriculaById(idTurmaMatricula)
+
+        if (statusId) {
+
+            let resultadoDadosTurmaMatricula = await turmaMatriculaDAO.updateTurmaMatricula(dadosTurmaMatricula)
+
+            if (resultadoDadosTurmaMatricula) {
+
+                let dadosTurmaMatriculaJSON = {}
+
+                dadosTurmaMatriculaJSON.status = message.SUCCESS_UPDATE_ITEM.status
+                dadosTurmaMatriculaJSON.message = message.SUCCESS_UPDATE_ITEM.message
+                dadosTurmaMatricula.turma_matricula = dadosTurmaMatricula
+
+                return dadosTurmaMatricula
+
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
+
     }
+}
+
+const deletarTurmaMatricula = async function (idTurmaMatricula) {
+
+    if (idTurmaMatricula == '' || idTurmaMatricula == undefined || isNaN(idTurmaMatricula)) {
+
+        return message.ERROR_INVALID_ID
+
+    } else {
+
+        let statusId = await turmaMatriculaDAO.selectTurmaMatriculaById(idTurmaMatricula)
+
+        if (statusId) {
+
+            let resultadoDadosTurmaMatricula = await turmaMatriculaDAO.deleteTurmaMatricula(idTurmaMatricula)
+
+            if (resultadoDadosTurmaMatricula) {
+
+                return message.SUCCESS_DELETE_ITEM
+
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
+
+        } else {
+            return message.ERROR_ID_NOT_FOUND
+        }
+
+    }
+
 }
 
 module.exports = {
     getTurmaMatricula,
     getTurmaMatriculaById,
-    insertTurmaMatricula,
-
+    inserirTurmaMatricula,
+    atualizarTurmaMatricula,
+    deletarTurmaMatricula
 }

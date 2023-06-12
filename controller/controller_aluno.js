@@ -169,7 +169,7 @@ const deletarAluno = async function (idAluno) {
         return message.ERROR_INVALID_ID
     } else {
 
-        let statusId = await alunoDAO.selectLastId(idAluno)
+        let statusId = await alunoDAO.selectAlunoById(idAluno)
 
         if (statusId) {
 

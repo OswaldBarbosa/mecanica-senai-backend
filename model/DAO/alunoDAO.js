@@ -70,11 +70,8 @@ const insertAluno = async function (dadosAluno) {
         '${dadosAluno.data_nascimento}'
         );`
 
-<<<<<<< HEAD
-=======
     
 
->>>>>>> c0798f45f3361cf62f07e1a5033f3089771b7d6e
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoAluno) {
@@ -97,11 +94,8 @@ const updateAluno = async function (dadosAluno) {
 
     let resultadoAluno = await prisma.$executeRawUnsafe(sql)
 
-<<<<<<< HEAD
-=======
     
 
->>>>>>> c0798f45f3361cf62f07e1a5033f3089771b7d6e
     if (resultadoAluno) {
         return true
     } else {
@@ -115,10 +109,7 @@ const deleteAluno = async function (idAluno) {
 
     let sql = `delete from tbl_aluno where id = ${idAluno}`
 
-<<<<<<< HEAD
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
-=======
->>>>>>> c0798f45f3361cf62f07e1a5033f3089771b7d6e
 
     if (resultadoAluno) {
         return true

@@ -59,8 +59,6 @@ const selectMatriculaByNumero = async function (numeroMatricula) {
 
     let sql = `select * from tbl_matricula where numero = ${numeroMatricula}`
 
-    console.log(sql);
-
     let resultadoMatricula = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoMatricula.length > 0) {

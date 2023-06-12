@@ -98,8 +98,8 @@ const atualizarUsuario = async function (dadosUsuario, idUsuario) {
 
     //Validação para tratar campos obrigatórios e quantidade de caracteres
     if (dadosUsuario.email == ''                || dadosUsuario.email == undefined              || dadosUsuario.email.length > 255 ||
-    dadosUsuario.senha == ''                || dadosUsuario.senha == undefined              || dadosUsuario.senha.length > 255 ||
-    dadosUsuario.id_usuario_tipo == ''      || dadosUsuario.id_usuario_tipo == undefined    || isNaN(dadosUsuario.id_usuario_tipo)
+        dadosUsuario.senha == ''                || dadosUsuario.senha == undefined              || dadosUsuario.senha.length > 255 ||
+        dadosUsuario.id_usuario_tipo == ''      || dadosUsuario.id_usuario_tipo == undefined    || isNaN(dadosUsuario.id_usuario_tipo)
     ) {
 
         return message.ERROR_REQUIRED_FIELDS //status code 400
@@ -113,7 +113,7 @@ const atualizarUsuario = async function (dadosUsuario, idUsuario) {
         //adiciona o idUsuario no json dos dadosUsuario
         dadosUsuario.id = idUsuario
 
-        let statusId = await usuarioDAO.selectLastId(idUsuario)
+        let statusId = await usuarioDAO.selectUsuarioById(idUsuario)
 
         if (statusId) {
 
@@ -131,11 +131,11 @@ const atualizarUsuario = async function (dadosUsuario, idUsuario) {
                 return dadosUsuarioJSON
 
             } else {
-                message.ERROR_INTERNAL_SERVER //500
+                return message.ERROR_INTERNAL_SERVER //500
             }
 
         } else {
-            message.ERROR_INTERNAL_SERVER //404
+            return message.ERROR_ID_NOT_FOUND //404
         }
 
     }
@@ -149,7 +149,7 @@ const deletarUsuario = async function (idUsuario) {
         return message.ERROR_INVALID_ID
     } else {
 
-        let statusId = await usuarioDAO.selectLastId(idUsuario)
+        let statusId = await usuarioDAO.selectUsuarioById(idUsuario)
 
         if (statusId) {
 

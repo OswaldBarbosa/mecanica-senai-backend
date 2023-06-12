@@ -33,7 +33,7 @@ const getPeriodo = async function () {
 const getPeriodoById = async function (idPeriodo) {
 
     if (idPeriodo == '' || idPeriodo == undefined || isNaN(idPeriodo)) {
-        return message.ERROR_REQUIRED_FIELDS
+        return message.ERROR_INVALID_ID
     } else {
 
         let dadosPeriodo = await periodoDAO.selectPeriodoById(idPeriodo)
@@ -59,10 +59,10 @@ const getPeriodoById = async function (idPeriodo) {
 const getPeriodoByNome = async function (nomePeriodo) {
 
     if (nomePeriodo == '' || nomePeriodo == undefined || !isNaN(nomePeriodo)) {
-        return message.ERROR_REQUIRED_FIELDS
+        return message.ERROR_INVALID_NAME
     } else {
 
-        let dadosPeriodo = await periodoDAO.selectPeriodoByNome(nomePeriodo)
+        let dadosPeriodo = await periodoDAO.selectPeriodoByName(nomePeriodo)
 
         if (dadosPeriodo) {
 
@@ -162,7 +162,7 @@ const deletarPeriodo = async function (idPeriodo) {
 
     } else {
 
-        let statusId = await periodoDAO.selectLastId(idPeriodo)
+        let statusId = await periodoDAO.selectPeriodoById(idPeriodo)
 
         if (statusId) {
 
