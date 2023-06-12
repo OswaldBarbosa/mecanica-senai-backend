@@ -14,7 +14,12 @@ var prisma = new PrismaClient()
 //seleciona todos os alunos dentro do banco de dados
 const selectAllAlunos = async function () {
 
-    let sql = `select * from tbl_aluno`
+    let sql = `select 	tbl_aluno.nome, tbl_aluno.data_nascimento,
+                        tbl_matricula.numero as numero_matricula
+                  
+                        from tbl_aluno
+                            inner join tbl_matricula
+                                on tbl_aluno.id = tbl_matricula.id_aluno;`
 
     let resultadoAluno = await prisma.$queryRawUnsafe(sql)
 
