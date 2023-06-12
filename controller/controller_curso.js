@@ -116,7 +116,6 @@ const inserirCurso = async function (dadosCurso) {
 
 const updateCurso = async function (dadosCurso, idCurso) {
 
-
     if (dadosCurso.nome == '' || dadosCurso.nome == undefined || dadosCurso.nome.length > 70 || !isNaN(dadosCurso.nome) ||
         dadosCurso.sigla == '' || dadosCurso.sigla == undefined || dadosCurso.sigla.length > 20 || !isNaN(dadosCurso.sigla) ||
         dadosCurso.carga_horaria == '' || dadosCurso.carga_horaria == undefined || isNaN(dadosCurso.carga_horaria) ||
@@ -137,7 +136,7 @@ const updateCurso = async function (dadosCurso, idCurso) {
 
         if (statusId) {
 
-            let resultadoDadosCurso = await cursoDAO.updateCurso(idCurso)
+            let resultadoDadosCurso = await cursoDAO.updateCurso(dadosCurso)
 
             if (resultadoDadosCurso) {
 
