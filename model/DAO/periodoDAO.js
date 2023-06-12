@@ -55,13 +55,17 @@ const selectPeriodoByName = async function (nomePeriodo) {
 
 const insertPeriodo = async function (dadosPeriodo) {
 
-    let sql = `insert into tbl_periodo(
-                            nome
-                            )values(
-                            '${dadosPeriodo}'
-                            )`
+    let sql = `insert into tbl_periodo (
+        nome 
+        ) values (
+        '${dadosPeriodo.nome}'
+        )
+        `
 
-    let resultadoPeriodo = await prisma.executeRawUnsafe(sql)
+    console.log(sql);
+    
+
+    let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
 
     if (resultadoPeriodo)
         return true
@@ -86,7 +90,7 @@ const updatePeriodo = async function (dadosPeriodo) {
 
 const deletePeriodo = async function (idPeriodo) {
 
-    let sql = `delete from tbl_horario where id = ${idPeriodo}`
+    let sql = `delete from tbl_periodo where id = ${idPeriodo}`
 
     let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
 
@@ -100,12 +104,12 @@ const deletePeriodo = async function (idPeriodo) {
 
 const selectLastId = async function () {
 
-    let sql = `select * from tbl_horario order by id desc limit 1`
+    let sql = `select * from tbl_periodo order by id desc limit 1`
 
-    let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
+    let resultadoPeriodo = await prisma.$queryRawUnsafe(sql)
 
     if (resultadoPeriodo)
-        return true
+        return resultadoPeriodo
     else
         return false
 }

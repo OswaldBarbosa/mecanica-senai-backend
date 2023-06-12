@@ -15,7 +15,6 @@ const selectAllCursos = async function(){
 
     let sql = `select * from tbl_curso`
 
-
     let resultadoCurso = await prisma.$queryRawUnsafe(sql)
 
     if(resultadoCurso.length > 0)
@@ -27,8 +26,7 @@ const selectAllCursos = async function(){
 
 const selectCursoById = async function(id){
 
-    let sql = `select * from tbl_curso
-                    where id = ${id};`
+    let sql = `select * from tbl_curso where id = ${id};`
 
         let resultadoCurso = await prisma.$queryRawUnsafe(sql)
 
@@ -68,16 +66,16 @@ const selectLastId = async function(){
 const insertCurso = async function(dadosCurso){
 
     let sql = `insert into tbl_curso(
-                                        nome,
-                                        sigla,
-                                        carga_horaria,
-                                        descricao
-                                        ) values (
-                                        '${dadosCurso.nome}',
-                                        '${dadosCurso.sigla}',
-                                        '${dadosCurso.carga_horaria}',
-                                        '${dadosCurso.descricao}'
-                                        );`
+        nome,
+        sigla,
+        carga_horaria,
+        descricao
+        ) values (
+        '${dadosCurso.nome}',
+        '${dadosCurso.sigla}',
+        '${dadosCurso.carga_horaria}',
+        '${dadosCurso.descricao}'
+        )`
 
     let resultadoCurso = await prisma.$executeRawUnsafe(sql)
 

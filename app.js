@@ -447,7 +447,7 @@ app.delete('/v1/projeto-mecanica-senai/matricula/id/:id', cors(), async function
 
 })
 
-//******************************************************** ENDPOINTS - MATRICULA ****************************************************************/
+//******************************************************** ENDPOINTS - PERIODO ****************************************************************/
 
 app.get('/v1/projeto-mecanica-senai/periodo/', cors(), async function (request, response) {
 
@@ -478,7 +478,7 @@ app.get('/v1/projeto-mecanica-senai/periodo/nome/:nome', cors(), async function 
     response.json(dadosPeriodo)
 })
 
-app.post('/v1/projeto-mecanica-senai/periodo', cors(), bodyParserJSON, async function (request, response) {
+app.post('/v1/projeto-mecanica-senai/periodo/', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']
 
@@ -486,7 +486,7 @@ app.post('/v1/projeto-mecanica-senai/periodo', cors(), bodyParserJSON, async fun
 
         let dadosBody = request.body
 
-        let dadosPeriodo = await controllerPeriodo.insertPeriodo(dadosBody)
+        let dadosPeriodo = await controllerPeriodo.inserirPeriodo(dadosBody)
 
         response.status(dadosPeriodo.status)
         response.json(dadosPeriodo)
@@ -530,6 +530,26 @@ app.delete('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (
     response.message(dadosPeriodo)
 })
 
+//******************************************************** ENDPOINTS - MATERIA ****************************************************************/
+
+app.get('/v1/projeto-mecanica-senai/materia', cors(), async function (request, response) {
+
+    let dadosMateria = await controllerMateria.getMaterias()
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+
+})
+
+app.get('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function (request, response) {
+
+    let idMateria = request.params.id
+
+    let dadosMateria = await controllerMateria.getMateriaById(idMateria)
+
+    response.status(dadosMateria.status)
+    response.json(dadosMateria)
+})
 
 app.get('/v1/projeto-mecanica-senai/materia/nome/:nome', cors(), async function (request, response) {
 
@@ -608,7 +628,8 @@ app.delete('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function (
     response.json(dadosMateria)
 })
 
-/*********************************************CURSOS*********************************************** */
+/********************************************* ENDPOINTS - CURSOS *********************************************** */
+
 app.get('/v1/projeto-mecanica-senai/curso', cors(), async function (request, response) {
 
     let dadosCurso = await controllerCurso.getCursos()
@@ -657,6 +678,7 @@ app.post('/v1/projeto-mecanica-senai/curso', cors(), bodyParserJSON, async funct
         response.json(message.ERROR_INVALID_CONTENT_TYPE)
     }
 })
+
 app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']
@@ -683,38 +705,17 @@ app.put('/v1/projeto-mecanica-senai/curso/id/:id', cors(), bodyParserJSON, async
 })
 
 app.delete('/v1/projeto-mecanica-senai/curso/id/:id', cors(), async function (request, response) {
+
     let idCurso = request.params.id
 
     let dadosCurso = await controllerCurso.deletarCurso(idCurso)
 
     response.status(dadosCurso.status)
     response.json(dadosCurso)
+    
 })
 
-//************************************************ ENDPOINTS MATERIA *********************************************/
-
-app.get('/v1/projeto-mecanica-senai/materia', cors(), async function (request, response) {
-
-    let dadosMateria = await controllerMateria.getMaterias()
-
-    response.status(dadosMateria.status)
-    response.json(dadosMateria)
-
-})
-
-app.get('/v1/projeto-mecanica-senai/materia/id/:id', cors(), async function (request, response) {
-
-    let idMateria = request.params.id
-
-    let dadosMateria = await controllerMateria.getMateriaById(idMateria)
-
-    response.status(dadosMateria.status)
-    response.json(dadosMateria)
-})
-
-/********************************************************* ENDPOINTS - CURSOS **********************************************************/
-
-/****************************************END POINT  HORARIO*******************************************/
+/********************************************************* ENDPOINTS - HORARIO **********************************************************/
 
 app.get('/v1/projeto-mecanica-senai/horario', cors(), async function (request, response) {
 
@@ -754,11 +755,6 @@ app.post('/v1/projeto-mecanica-senai/horario', cors(), bodyParserJSON, async fun
 
 })
 
-
-/********************************************************* ENDPOINTS - MATRICULA **********************************************************/
-
-/********************************************************* ENDPOINTS - PERIODO **********************************************************/
-
 app.put('/v1/projeto-mecanica-senai/horario/id/:id', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']
@@ -789,9 +785,7 @@ app.delete('/v1/projeto-mecanica-senai/horario/id/:id', cors(), async function (
     response.json(dadosHorario)
 })
 
-
-
-//*******************************************************END POINTS USUARIO TIPO **********************************************/
+//******************************************************* ENDPOINTS - USUARIO TIPO **********************************************/
 
 app.get('/v1/projeto-mecanica-senai/usuario-tipo', cors(), async function (request, response) {
 
@@ -871,7 +865,7 @@ app.delete('/v1/projeto-mecanica-senai/periodo/id/:id', cors(), async function (
     
 })
 
-/**************************************************END POINTS CRITERIO_TIPO *************************************************/
+/************************************************** ENDPOINTS - CRITERIO TIPO *************************************************/
 
 app.get('/v1/projeto-mecanica-senai/criterio-tipo', cors(), async function (request, response){
 
@@ -952,7 +946,7 @@ app.delete('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async func
     response.json(dadosCriterioTipo)
 })
 
-/********************************************END POINT AVALIAÇÃO **************************************************************/
+/******************************************** ENDPOINTS - AVALIAÇÃO **************************************************************/
 
 app.get('/v1/projeto-mecanica-senai/avaliacao', cors(), async function(request, response){
 
@@ -1020,8 +1014,6 @@ app.delete('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async func
     response.json(dadosAvaliacao)
 })
 /********************************************************* ENDPOPINTS **********************************************************/
-
-
 
 app.listen(8080, function () {
     console.log('Servidor aguardando requisições na porta 8080')
