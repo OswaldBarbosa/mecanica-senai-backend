@@ -96,6 +96,29 @@ const getMateriaBySigla = async function (siglaMateria) {
 
 }
 
+//Função que retorna as materias de determinado aluno
+const getMateriaByAluno = async function(idAluno){
+
+    if(idAluno == '' || idAluno == undefined || isNaN(idAluno)){
+        return message.ERROR_INVALID_NAME
+    }else{
+
+        let dadosMateria = await materiaDAO.selectMateriaByIdAluno(idAluno)
+
+        if(dadosMateria){
+            let dadosMateriaJSON = {}
+
+            dadosMateriaJSON.status = message.SUCCESS_REQUEST.status
+            dadosMateriaJSON.message = message.SUCCESS_REQUEST.message
+            dadosMateriaJSON.quantidade = dadosMateria.length
+            dadosMateriaJSON.materias = dadosMateria
+
+            return dadosMateriaJSON
+        }else{
+            return message.ERROR_NOT_FOUND
+        }
+    }
+}
 
 //Função que insere uma nova matéria
 const inserirMateria = async function (dadosMateria) {
@@ -192,6 +215,7 @@ module.exports = {
     getMateriaById,
     getMateriaByName,
     getMateriaBySigla,
+    getMateriaByAluno,
     getMaterias,
     inserirMateria,
     updateMateria,
