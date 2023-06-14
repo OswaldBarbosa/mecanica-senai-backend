@@ -46,6 +46,7 @@ var controllerUsuarioTipo = require('./controller/controller_usuario_tipo')
 var controllerCriterioTipo = require('./controller/controller_criterio_tipo')
 
 var controllerAvaliacao = require('./controller/controller_avaliacao.js')
+var controllerResultadoTarefa = require('./controller/controllerResultadoTarefa.js')
 
 var controllerMatricula = require('./controller/controller_matricula.js')
 
@@ -1098,6 +1099,69 @@ app.delete('/v1/projeto-mecanica-senai/criterio-tipo/id/:id', cors(), async func
     response.json(dadosAvaliacao)
 })
 
+/***************************************** END POINTS RESULTADO TAREFA ***************************************/
+app.get('/v1/projeto-mecanica-senai/resultado-tarefa', cors(), async function(request, response){
+
+    let dadosResultadoTarefa = await controllerResultadoTarefa.getAllResultadoTarefa()
+
+    response.status(dadosResultadoTarefa.status)
+    response.json(dadosResultadoTarefa)
+})
+
+app.get('/v1/projeto-mecanica-senai/resultado-tarefa/id/:id', cors(), async function(request, response){
+
+    let idResultadoTarefa = request.params.id
+
+    let dadosResultadoTarefa = await controllerResultadoTarefa.getResultadoTarefaById(idResultadoTarefa)
+
+    response.status(dadosResultadoTarefa.status)
+    response.json(dadosResultadoTarefa)
+})
+
+app.post('/v1/projeto-mecanica-senai/resultado-tarefa', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    if(String(contentType).toLowerCase == 'application/json'){
+
+        let dadosBody = request.body
+
+        let dadosResultadoTarefa = await controllerResultadoTarefa.insertResultadoTarefa(dadosBody)
+
+        response.status(dadosResultadoTarefa.status)
+        response.json(dadosResultadoTarefa)
+    }else{
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+})
+
+app.put('/v1/projeto-mecanica-senai/resultado-tarefa/id/:id', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    if(String(contentType).toLowerCase == 'application/json'){
+
+        let dadosBody = request.body
+
+        let idResultadoTarefa = request.params.id
+
+        let dadosResultadoTarefa = await controllerResultadoTarefa.updateResultadoTarefa(dadosBody, idResultadoTarefa)
+
+        response.status(dadosResultadoTarefa.status)
+        response.json(dadosResultadoTarefa)
+    }
+})
+
+app.delete('/v1/projeto-mecanica-senai/resultado-tarefa/id/:id', cors(), async function(request, response){
+
+    let idResultadoTarefa = request.params.id
+
+    let dadosResultadoTarefa = await controllerResultadoTarefa.deleteResultadoTarefa(idResultadoTarefa)
+
+    response.status(dadosResultadoTarefa.status)
+    response.json(dadosResultadoTarefa)
+})
 /********************************************************* ENDPOPINTS **********************************************************/
 
 app.listen(8080, function () {
