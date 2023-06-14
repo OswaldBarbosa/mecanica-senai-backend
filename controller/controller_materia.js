@@ -136,10 +136,11 @@ const inserirMateria = async function (dadosMateria) {
 //Função que atualiza o aluno
 const updateMateria = async function (dadosMateria, idMateria) {
 
-    if (dadosMateria.nome == '' || dadosMateria.nome == undefined || dadosMateria.nome.length > 45 || !isNaN(dadosMateria.nome) ||
-        dadosMateria.sigla == '' || dadosMateria.sigla == undefined || dadosMateria.sigla.length > 20 || !isNaN(dadosMateria.sigla) ||
-        dadosMateria.carga_horaria == '' || dadosMateria.carga_horaria == undefined || isNaN(dadosMateria.carga_horaria) ||
-        dadosMateria.descricao == '' || dadosMateria.descricao == undefined || !isNaN(dadosMateria.descricao)) {
+    if (dadosMateria.nome == ''             || dadosMateria.nome == undefined           || dadosMateria.nome.length > 45        || !isNaN(dadosMateria.nome) ||
+        dadosMateria.sigla == ''            || dadosMateria.sigla == undefined          || dadosMateria.sigla.length > 20       || !isNaN(dadosMateria.sigla) ||
+        dadosMateria.carga_horaria == ''    || dadosMateria.carga_horaria == undefined  || isNaN(dadosMateria.carga_horaria)    ||
+        dadosMateria.descricao == ''        || dadosMateria.descricao == undefined      || !isNaN(dadosMateria.descricao)) 
+        {
 
         return message.ERROR_REQUIRED_FIELDS
 
@@ -151,7 +152,7 @@ const updateMateria = async function (dadosMateria, idMateria) {
         let atualizarMateria = await materiaDAO.updateMateria(dadosMateria, idMateria)
         let materiaAtualizada = await materiaDAO.selectMateriaById(idMateria)
 
-        if (dadosMateria) {
+        if (atualizarMateria) {
             dadosMateriaJSON.status = message.SUCCESS_UPDATE_ITEM.status
             dadosMateriaJSON.message = message.SUCCESS_UPDATE_ITEM.message
             dadosMateriaJSON.materiaAtualizada = materiaAtualizada
