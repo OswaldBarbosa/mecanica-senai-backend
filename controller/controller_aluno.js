@@ -1,12 +1,14 @@
 /***************************************************************************************
-* Objetivo: Controller para controlar aluno
+* Objetivo: Arquivo para fazer o controle dos dados de alunos de nosso sistema
 * Data: 23/05/2023
-* Autor: Vinícius Monteiro
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
-var message = require('../controller/modulo/config.js')
+
 var alunoDAO = require('../model/DAO/alunoDAO.js')
+
+var message = require('../controller/modulo/config.js')
 
 //Função que retorna a lista de todos os alunos existentes dentro de nosso banco de dados
 const getAlunos = async function () {
@@ -132,7 +134,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 
         dadosAluno.id = idAluno
 
-        let statusId = await alunoDAO.selectLastId(id)
+        let statusId = await alunoDAO.selectAlunoById(idAluno)
 
         if (statusId) {
 
@@ -144,7 +146,7 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 
                 dadosAlunoJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosAlunoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosAlunoJSON.aluno = resultaDadosProfessor
+                dadosAlunoJSON.aluno = dadosAluno
 
                 return dadosAlunoJSON
 
@@ -163,11 +165,11 @@ const atualizarAluno = async function (dadosAluno, idAluno) {
 //Função que deleta um aluno existente
 const deletarAluno = async function (idAluno) {
 
-    if (idAluno == undefined || idAluno == '' || isNaN(idAluno)) {
+    if (idAluno == '' || idAluno == undefined || isNaN(idAluno)) {
         return message.ERROR_INVALID_ID
     } else {
 
-        let statusId = await alunoDAO.selectLastId(idAluno)
+        let statusId = await alunoDAO.selectAlunoById(idAluno)
 
         if (statusId) {
 

@@ -1,13 +1,13 @@
-        /***************************************************************************************
+/***************************************************************************************
 * Objetivo: Arquivo para fazer o controle dos dados de professores de nosso sistema
 * Data: 23/05/2023
-* Autor: André Luiz e Oswaldão zika
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
 var professorDAO = require('../model/DAO/professorDAO.js')
 
-var message = require('../controller/modulo/config.js')
+var message = require('./modulo/config.js')
 
 //Função que retorna a lista de todos os professores existentes dentro de nosso banco de dados
 const getProfessores = async function () {
@@ -88,7 +88,9 @@ const inserirProfessor = async function (dadosProfessor) {
         dadosProfessor.nif == ''                || dadosProfessor.nif == undefined              || dadosProfessor.nif.length > 10               || isNaN(dadosProfessor.nif) ||
         dadosProfessor.id_usuario == ''         || dadosProfessor.id_usuario == undefined       || isNaN(dadosProfessor.id_usuario)
     ) {
+
         return message.ERROR_REQUIRED_FIELDS
+        
     } else {
 
         //Envia os dados para a model inserir no banco de dados
@@ -175,14 +177,16 @@ const deletarProfessor = async function (idProfessor) {
 
     } else {
 
-        let statusId = await professorDAO.selectLastId(idProfessor)
+        let statusId = await professorDAO.selectProfessoreById(idProfessor)
 
         if (statusId) {
 
             let resultadoDadosProfessor = await professorDAO.deleteProfessor(idProfessor)
 
             if (resultadoDadosProfessor) {
+
                 return message.SUCCESS_DELETE_ITEM
+                
             } else {
                 return message.ERROR_INTERNAL_SERVER
             }

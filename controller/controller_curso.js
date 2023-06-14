@@ -1,11 +1,12 @@
 /***************************************************************************************
-* Objetivo: Controller para controlar curso
+* Objetivo: Arquivo para fazer o controle dos dados de cursos de nosso sistema
 * Data: 23/05/2023
-* Autor: Vinícius Monteiro
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
 var cursoDAO = require('../model/DAO/cursoDAO.js')
+
 var message = require('./modulo/config.js')
 
 const getCursos = async function () {
@@ -115,14 +116,14 @@ const inserirCurso = async function (dadosCurso) {
 
 const updateCurso = async function (dadosCurso, idCurso) {
 
-    let dadosCursoJSON = {}
-
     if (dadosCurso.nome == '' || dadosCurso.nome == undefined || dadosCurso.nome.length > 70 || !isNaN(dadosCurso.nome) ||
         dadosCurso.sigla == '' || dadosCurso.sigla == undefined || dadosCurso.sigla.length > 20 || !isNaN(dadosCurso.sigla) ||
         dadosCurso.carga_horaria == '' || dadosCurso.carga_horaria == undefined || isNaN(dadosCurso.carga_horaria) ||
-        dadosCurso.descricao == '' || dadosCurso.descricao == undefined || !isNaN(dadosCurso.descricao)) {
+        dadosCurso.descricao == '' || dadosCurso.descricao == undefined || !isNaN(dadosCurso.descricao)
+    ) {
 
-        return message.ERROR_INVALID_NAME
+        return message.ERROR_REQUIRED_FIELDS
+
     } else if (idCurso == '' || idCurso == undefined || isNaN(idCurso)) {
 
         return message.ERROR_INVALID_ID
@@ -130,23 +131,34 @@ const updateCurso = async function (dadosCurso, idCurso) {
     } else {
 
         dadosCurso.id = idCurso
-        let resultadoCurso = await cursoDAO.updateCurso(dadosCurso)
 
-        if (resultadoCurso) {
+        let statusId = await cursoDAO.selectCursoById(idCurso)
 
-            let cursoAtualizado = await cursoDAO.selectCursoById(idCurso)
+        if (statusId) {
 
-            dadosCursoJSON.status = message.SUCCESS_UPDATE_ITEM.status
-            dadosCursoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-            dadosCursoJSON.cursoAtualizado = cursoAtualizado
+            let resultadoDadosCurso = await cursoDAO.updateCurso(dadosCurso)
 
-            return dadosCursoJSON
-        } else {
-            return message.ERROR_INTERNAL_SERVER
+            if (resultadoDadosCurso) {
+
+                let dadosCursoJSON = {}
+
+                dadosCursoJSON.status = message.SUCCESS_UPDATE_ITEM.status
+                dadosCursoJSON.message = message.SUCCESS_UPDATE_ITEM.message
+                dadosCursoJSON.curso = dadosCurso
+
+                return dadosCursoJSON
+
+            } else {
+                return message.error.ERROR_INTERNAL_SERVER
+            }
+
+        }else{
+            return message.ERROR_INVALID_ID
         }
+        
     }
-}
 
+}
 
 const deletarCurso = async function (id) {
 
@@ -154,18 +166,20 @@ const deletarCurso = async function (id) {
         return message.ERROR_INVALID_ID
     } else {
 
-        let cursoDeletado = await cursoDAO.selectCursoById(id)
-        let resultadoCurso = await cursoDAO.deleteCurso(id)
+        let statusId = await cursoDAO.selectCursoById(id)
 
+        if (statusId) {
 
-        if (resultadoCurso) {
-            let dadosCursoJSON = {}
+            let resultadoDadosCurso = await cursoDAO.deleteCurso(id)
 
-            dadosCursoJSON.status = message.SUCCESS_DELETE_ITEM.status
-            dadosCursoJSON.message = message.SUCCESS_DELETE_ITEM.message
-            dadosCursoJSON.cursoDeletado = cursoDeletado
+            if (resultadoDadosCurso) {
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
+            }
 
-            return dadosCursoJSON
+        } else {
+            return message.ERROR_ID_NOT_FOUND
         }
 
     }

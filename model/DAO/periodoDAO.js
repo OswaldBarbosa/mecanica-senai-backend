@@ -11,81 +11,89 @@ var { PrismaClient } = require('@prisma/client')
 //Criando a instancia do prisma 
 var prisma = new PrismaClient()
 
-const selectAllPeriodos = async function(){
+const selectAllPeriodos = async function () {
 
     let sql = `select * from tbl_periodo`
 
     let resultadoPeriodo = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoPeriodo.length > 0)
+    if (resultadoPeriodo.length > 0) {
         return resultadoPeriodo
-    else
+    } else {
         return false
+    }
+
 }
 
-const selectPeriodoById = async function(idPeriodo){
+const selectPeriodoById = async function (idPeriodo) {
 
-    let sql = `select *from tbl_periodo where id = ${idPeriodo}`
+    let sql = `select * from tbl_periodo where id = ${idPeriodo}`
 
     let resultadoPeriodo = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoPeriodo.length > 0)
+    if (resultadoPeriodo.length > 0) {
         return resultadoPeriodo
-    else
+    } else {
         return false
+    }
 
 }
 
-const selectPeriodoByName = async function(nomePeriodo){
+const selectPeriodoByName = async function (nomePeriodo) {
 
     let sql = `select * from tbl_periodo where nome like '%${nomePeriodo}%'`
 
     let resultadoPeriodo = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoPeriodo.length > 0 )
+    if (resultadoPeriodo.length > 0) {
         return resultadoPeriodo
-    else
-        return false 
+    } else {
+        return false
+    }
+    
 }
 
-const insertPeriodo = async function(dadosPeriodo){
+const insertPeriodo = async function (dadosPeriodo) {
 
-    let sql = `insert into tbl_periodo(
-                            nome
-                            )values(
-                            '${dadosPeriodo}'
-                            )`
+    let sql = `insert into tbl_periodo (
+        nome 
+        ) values (
+        '${dadosPeriodo.nome}'
+        )
+        `
 
-    let resultadoPeriodo = await prisma.executeRawUnsafe(sql)
+    console.log(sql);
+    
 
-    if(resultadoPeriodo)
+    let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
+
+    if (resultadoPeriodo)
         return true
     else
         return false
 }
 
-const updatePeriodo = async function(dadosPeriodo){
+const updatePeriodo = async function (dadosPeriodo) {
 
     let sql = `update tbl_periodo set 
-                        nome = '${dadosPeriodo.dadosPeriodo}'
-                        
-                        where id = ${dadosPeriodo.id}` 
+                        nome = '${dadosPeriodo.nome}'
+                        where id = ${dadosPeriodo.id}`
 
     let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
 
-    if(resultadoPeriodo)
+    if (resultadoPeriodo)
         return true
     else
         return false
 }
 
-const deletePeriodo = async function(idPeriodo){
+const deletePeriodo = async function (idPeriodo) {
 
-    let sql = `delete from tbl_horario where id = ${idPeriodo}`
+    let sql = `delete from tbl_periodo where id = ${idPeriodo}`
 
     let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
 
-    if(resultadoPeriodo)
+    if (resultadoPeriodo)
         return true
     else
         return false
@@ -93,14 +101,14 @@ const deletePeriodo = async function(idPeriodo){
 
 }
 
-const selectLastId = async function(){
+const selectLastId = async function () {
 
-    let sql = `select * from tbl_horario order by id desc limit 1`
+    let sql = `select * from tbl_periodo order by id desc limit 1`
 
-    let resultadoPeriodo = await prisma.$executeRawUnsafe(sql)
+    let resultadoPeriodo = await prisma.$queryRawUnsafe(sql)
 
-    if(resultadoPeriodo)
-        return true
+    if (resultadoPeriodo)
+        return resultadoPeriodo
     else
         return false
 }

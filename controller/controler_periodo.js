@@ -1,33 +1,33 @@
 /***************************************************************************************
-* Objetivo: Controller para controlar periodo
+* Objetivo: Arquivo para fazer o controle dos dados de periodo de nosso sistema
 * Data: 23/05/2023
-* Autor: Vinícius Monteiro
+* Autor: Oswaldo Barbosa, Vinicius Monteiro
 * Versão: 1.0
 ***************************************************************************************/
 
-var message = require('./modulo/config.js')
-
 var periodoDAO = require('../model/DAO/periodoDAO.js')
 
-const getAllPeriodos = async function () {
+var message = require('./modulo/config.js')
+
+const getPeriodo = async function () {
+
+    let dadosPeriodoJSON = {}
 
     let dadosPeriodo = await periodoDAO.selectAllPeriodos()
 
     if (dadosPeriodo) {
 
-        let dadosPeriodoJSON = {}
-
         dadosPeriodoJSON.status = message.SUCCESS_REQUEST.status
         dadosPeriodoJSON.message = message.SUCCESS_REQUEST.message
         dadosPeriodoJSON.quantidade = dadosPeriodo.length
-        dadosPeriodoJSON.periodos = dadosPeriodo
+        dadosPeriodoJSON.periodo = dadosPeriodo
 
         return dadosPeriodoJSON
 
     } else {
-
         return message.ERROR_NOT_FOUND
     }
+
 }
 
 const getPeriodoById = async function (idPeriodo) {
@@ -35,6 +35,7 @@ const getPeriodoById = async function (idPeriodo) {
     if (idPeriodo == '' || idPeriodo == undefined || isNaN(idPeriodo)) {
         return message.ERROR_INVALID_ID
     } else {
+
         let dadosPeriodo = await periodoDAO.selectPeriodoById(idPeriodo)
 
         if (dadosPeriodo) {
@@ -43,16 +44,19 @@ const getPeriodoById = async function (idPeriodo) {
 
             dadosPeriodoJSON.status = message.SUCCESS_REQUEST.status
             dadosPeriodoJSON.message = message.SUCCESS_REQUEST.message
-            dadosPeriodoJSON.peirodo = dadosPeriodo
+            dadosPeriodoJSON.periodo = dadosPeriodo
 
             return dadosPeriodoJSON
+
         } else {
             return message.ERROR_NOT_FOUND
         }
+
     }
+
 }
 
-const getPeriodoByName = async function (nomePeriodo) {
+const getPeriodoByNome = async function (nomePeriodo) {
 
     if (nomePeriodo == '' || nomePeriodo == undefined || !isNaN(nomePeriodo)) {
         return message.ERROR_INVALID_NAME
@@ -66,113 +70,123 @@ const getPeriodoByName = async function (nomePeriodo) {
 
             dadosPeriodoJSON.status = message.SUCCESS_REQUEST.status
             dadosPeriodoJSON.message = message.SUCCESS_REQUEST.message
-            dadosPeriodoJSON.quantidade = dadosPeriodo.length
-            dadosPeriodoJSON.periodos = dadosPeriodo
+            dadosPeriodoJSON.periodo = dadosPeriodo
 
             return dadosPeriodoJSON
-        } else {
 
+        } else {
             return message.ERROR_NOT_FOUND
         }
+
     }
 
 }
 
-const insertPeriodo = async function (dadosPeriodo) {
+const inserirPeriodo = async function (dadosPeriodo) {
 
-    if (dadosPeriodo.nome == '' || dadosPeriodo.nome == undefined || !isNaN(dadosPeriodo)) {
+    if (dadosPeriodo.nome == '' || dadosPeriodo.nome == undefined || !isNaN(dadosPeriodo.nome)) {
+
         return message.ERROR_REQUIRED_FIELDS
+
     } else {
 
-        let dadosPeriodo = await periodoDAO.insertPeriodo(dadosPeriodo)
+        let resultadoDadosPeriodo = await periodoDAO.insertPeriodo(dadosPeriodo)
 
-        if (dadosPeriodo) {
+        if (resultadoDadosPeriodo) {
 
-            let periodoCriado = await periodoDAO.selectLastId()
+            let novoPeriodo = await periodoDAO.selectLastId()
 
-            if (periodoCriado) {
-                let dadosPeriodoJSON = {}
+            let dadosPeriodoJSON = {}
 
-                dadosPeriodoJSON.status = message.SUCCESS_CREATE_ITEM.status
-                dadosPeriodoJSON.message = message.SUCCESS_CREATE_ITEM.message
-                dadosPeriodoJSON.periodoCriado = periodoCriado
+            dadosPeriodoJSON.status = message.SUCCESS_CREATE_ITEM.status
+            dadosPeriodoJSON.message = message.SUCCESS_CREATE_ITEM.message
+            dadosPeriodoJSON.periodo = novoPeriodo
 
-                return dadosPeriodoJSON
-            }
+            return dadosPeriodoJSON
+
         } else {
-            return message.ERROR_REQUIRED_FIELDS
+            return message.ERROR_NOT_FOUND
         }
-
 
     }
 
 }
 
-const updatePeriodo = async function (dadosPeriodo, idPeriodo) {
+const atualizarPeriodo = async function (dadosPeriodo, idPeriodo) {
 
-    if (dadosPeriodo.nome == '' || dadosPeriodo.nome == undefined || !isNaN(dadosPeriodo)) {
+    if (dadosPeriodo.nome == '' || dadosPeriodo.nome == undefined || !isNaN(dadosPeriodo.nome)) {
+
         return message.ERROR_REQUIRED_FIELDS
+
     } else if (idPeriodo == '' || idPeriodo == undefined || isNaN(idPeriodo)) {
 
         return message.ERROR_INVALID_ID
 
     } else {
+
         dadosPeriodo.id = idPeriodo
 
-        let periodoAtualizado = await periodoDAO.selectPeriodoById(idPeriodo)
+        let statusId = await periodoDAO.selectPeriodoById(idPeriodo)
 
-        if (periodoAtualizado) {
+        if (statusId) {
 
-            let atualizarPeriodo = await periodoDAO.updatePeriodo(dadosPeriodo)
+            let resultadoDadosPeriodo = await periodoDAO.updatePeriodo(dadosPeriodo)
 
-            if (atualizarPeriodo) {
+            if (resultadoDadosPeriodo) {
 
                 let dadosPeriodoJSON = {}
 
                 dadosPeriodoJSON.status = message.SUCCESS_UPDATE_ITEM.status
                 dadosPeriodoJSON.message = message.SUCCESS_UPDATE_ITEM.message
-                dadosPeriodoJSON.periodoAtualizado = periodoAtualizado
+                dadosPeriodoJSON.periodo = dadosPeriodo
 
                 return dadosPeriodoJSON
+
+            } else {
+                return message.ERROR_NOT_FOUND
             }
+
+        } else {
+            return message.ERROR_ID_NOT_FOUND
         }
+
     }
+
 }
 
-const deletePeriodo = async function (idPeriodo) {
+const deletarPeriodo = async function (idPeriodo) {
 
     if (idPeriodo == '' || idPeriodo == undefined || isNaN(idPeriodo)) {
+
         return message.ERROR_INVALID_ID
+
     } else {
 
-        let periodoDeletado = await periodoDAO.selectPeriodoById(idPeriodo)
+        let statusId = await periodoDAO.selectPeriodoById(idPeriodo)
 
-        if (periodoDeletado) {
+        if (statusId) {
 
             let dadosPeriodo = await periodoDAO.deletePeriodo(idPeriodo)
 
             if (dadosPeriodo) {
-
-                let dadosPeriodoJSON = {}
-
-                dadosPeriodoJSON.status = message.SUCCESS_DELETE_ITEM.status
-                dadosPeriodoJSON.message = message.SUCCESS_DELETE_ITEM.message
-                dadosPeriodoJSON.periodoDeletado = periodoDeletado
-
-                return dadosPeriodoJSON
+                return message.SUCCESS_DELETE_ITEM
+            } else {
+                return message.ERROR_INTERNAL_SERVER
             }
+
+        } else {
+            return message.ERROR_ID_NOT_FOUND
         }
+
     }
 
 }
 
 module.exports = {
-
-    getAllPeriodos,
+    getPeriodo,
     getPeriodoById,
-    getPeriodoByName,
-    insertPeriodo,
-    updatePeriodo,
-    deletePeriodo
-
+    getPeriodoByNome,
+    inserirPeriodo,
+    atualizarPeriodo,
+    deletarPeriodo
 }
