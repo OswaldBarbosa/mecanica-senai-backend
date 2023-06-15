@@ -570,15 +570,6 @@ app.get('/v1/projeto-mecanica-senai/materia/sigla/:sigla', cors(), async functio
     response.json(dadosMateria)
 })
 
-app.get('/v1/projeto-mecanica-senai/materia/aluno/id/:id', cors(), async function(request,response){
-
-    let idAluno = request.params.id
-
-    let dadosRespostaMateria = await controllerMateria.getMateriaByAluno(idAluno)
-
-    response.status(dadosRespostaMateria.status)
-    response.json(dadosRespostaMateria)
-})
 
 app.post('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async function (request, response) {
 

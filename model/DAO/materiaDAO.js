@@ -78,41 +78,7 @@ const selectMateriaBySigla = async function (siglaMateria) {
 
 }
 
-const selectMateriaByIdAluno = async function (idAluno) {
 
-    let sql = `select tbl_aluno.nome,
-                tbl_materia.nome as nome_materia
-                
-                from tbl_aluno
-                    
-                inner join tbl_matricula
-                on tbl_aluno.id = tbl_matricula.id_aluno
-    
-                inner join tbl_turma_matricula
-                on tbl_matricula.id = tbl_turma_matricula.id_matricula
-    
-                inner join tbl_turma
-                on tbl_turma_matricula.id_turma = tbl_turma.id
-    
-                inner join tbl_curso
-                on tbl_curso.id = tbl_turma.id_curso
-    
-                inner join tbl_curso_materia
-                on tbl_curso.id = tbl_curso_materia.id_curso
-    
-                inner join tbl_materia
-                on tbl_materia.id = tbl_curso_materia.id_materia
-                
-                where tbl_aluno.id = ${idAluno}`
-
-    let resultadoDadosMateria = await prisma.$queryRawUnsafe(sql)
-
-    if(resultadoDadosMateria.length > 0)
-        return resultadoDadosMateria
-    else
-        return false
-        
-}
 
 //Inserir nova matéria
 const insertMateria = async function (dadosMateria) {
@@ -186,8 +152,8 @@ module.exports = {
     selectAllMaterias,
     selectLastId,
     selectMateriaById,
-    selectMateriaByIdAluno,
     selectMateriaBySigla,
+    selectMateriaByName,
     insertMateria,
     updateMateria,
     deleteMateria
