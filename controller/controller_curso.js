@@ -45,7 +45,7 @@ const getCursosById = async function (id) {
         if (dadosCurso) {
             dadosCursoJSON.status = message.SUCCESS_REQUEST.status
             dadosCursoJSON.message = message.SUCCESS_REQUEST.message
-            dadosCursoJSON.aluno = dadosCurso
+            dadosCursoJSON.curso = dadosCurso
 
             return dadosCursoJSON
 
@@ -85,8 +85,6 @@ const getCursosByName = async function (nomeCurso) {
 }
 
 const inserirCurso = async function (dadosCurso) {
-
-
 
     if (dadosCurso.nome == '' || dadosCurso.nome == undefined || dadosCurso.nome.length > 70 || !isNaN(dadosCurso.nome) ||
         dadosCurso.sigla == '' || dadosCurso.sigla == undefined || dadosCurso.sigla.length > 20 || !isNaN(dadosCurso.sigla) ||
@@ -171,6 +169,7 @@ const deletarCurso = async function (id) {
         if (statusId) {
 
             let resultadoDadosCurso = await cursoDAO.deleteCurso(id)
+
 
             if (resultadoDadosCurso) {
                 return message.SUCCESS_DELETE_ITEM
