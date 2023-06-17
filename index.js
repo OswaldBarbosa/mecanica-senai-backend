@@ -570,6 +570,7 @@ app.get('/v1/projeto-mecanica-senai/materia/sigla/:sigla', cors(), async functio
     response.json(dadosMateria)
 })
 
+
 app.post('/v1/projeto-mecanica-senai/materia', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']

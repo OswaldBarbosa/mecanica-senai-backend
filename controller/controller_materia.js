@@ -100,7 +100,6 @@ const getMateriaBySigla = async function (siglaMateria) {
 //Função que insere uma nova matéria
 const inserirMateria = async function (dadosMateria) {
 
-    console.log(dadosMateria);
 
 
     if (dadosMateria.nome == '' || dadosMateria.nome == undefined || dadosMateria.nome.length > 45 || !isNaN(dadosMateria.nome) ||
